@@ -1,13 +1,27 @@
 window.onload = () => {
     //========================================HEADER _ HEADER _ HEADER==============================================//
 
+    //--------------  INPUT SEARCH -----------------------------//
+    let input = document.querySelector(".search input");
+    let iconSearch = document.querySelector(".icon-search");
+
+    input.onfocus = () => {
+        input.setAttribute("style","box-shadow: -5px 1px 10px 5px var(--bgColorHover);")
+        iconSearch.setAttribute("style","box-shadow: 5px 1px 10px 5px var(--bgColorHover);")
+        input.onblur = () => {
+            input.removeAttribute("style");
+            iconSearch.removeAttribute("style")
+        }
+    }
+
+    //---------COLAPSAR BOTON MENU----------------------//
+
     let button = document.querySelector(".buttonCollapse");
 
     let menu = document.getElementById("menu-column");
 
     let pantalla = window.screen.width;
 
-    //---------COLAPSAR BOTON MENU----------------------//
     button.onclick = () => {
         if (menu.hasAttribute("style") == false) {
             menu.setAttribute("style", "display: flex;");
@@ -24,23 +38,15 @@ window.onload = () => {
 
     // --SACA EL BOTON MENU Y PONE EL MENU INLINE----//
     function menuInline() {
-        document
-            .querySelector(".buttonCollapse")
-            .setAttribute("style", "display: none;");
+        document.querySelector(".buttonCollapse").setAttribute("style", "display: none;");
         document.getElementById("menu-column").removeAttribute("style");
-        document
-            .getElementById("menu-inline")
-            .setAttribute("style", "display: flex;");
+        document.getElementById("menu-inline").setAttribute("style", "display: flex;");
     }
 
     // ----SACA EL MENU INLINE Y PONE EL BOTON MENU ----//
     function menuColumn() {
-        document
-            .querySelector(".buttonCollapse")
-            .setAttribute("style", "display: flex;");
-        document
-            .getElementById("menu-inline")
-            .setAttribute("style", "display: none;");
+        document.querySelector(".buttonCollapse").setAttribute("style", "display: flex;");
+        document.getElementById("menu-inline").setAttribute("style", "display: none;");
     }
 
     // -CAMBIA EL MENU SEGUN EL TAMAÑO DE PANTALLA-//
@@ -52,39 +58,34 @@ window.onload = () => {
             menuInline();
         }
     };
-    //------------------------COLOCA EL FORMULARIO DE LOGEO-----------------//
+    //------------------------COLOCA EL FORMULARIO DE LOGEO-------------------------//
     const login = document.querySelector(".material-icons.icon-login");
     if (login) {
-        login.onclick = () => {
-            if (
-                document.querySelector(".navbar-login").hasAttribute("style") ==
-                false
-            ) {
-                document
-                    .querySelector(".search")
-                    .setAttribute("style", "display: none");
-                document
-                    .querySelector(".navbar-login")
-                    .setAttribute("style", "display: flex;");
-                document
-                    .querySelector(".navbar-login form")
-                    .setAttribute("style", "display: flex;");
-            } else {
-                document
-                    .querySelector(".search")
-                    .setAttribute("style", "display: flex");
-                document
-                    .querySelector(".navbar-login")
-                    .removeAttribute("style");
-                document
-                    .querySelector(".navbar-login form")
-                    .removeAttribute("style");
+            var modal = document.getElementById("myModal");
+
+            // Get the <span> element that closes the modal
+            var span = document.getElementsByClassName("close")[0];
+
+            // When the user clicks the button, open the modal 
+            login.onclick = function() {
+                modal.style.display = "block";
             }
-        };
+
+            // When the user clicks on <span> (x), close the modal
+            span.onclick = function() {
+                modal.style.display = "none";
+            }
+
+            // When the user clicks anywhere outside of the modal, close it
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
     }
 
     //===============================================BODY _ BODY _ BODY=============================================//
-   
+
     //-------------------------------- SLIDER AUTOMATICO Y MANUAL-------------------------------//
     $(function(){
         $('#slider a:gt(0)').hide();
