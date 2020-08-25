@@ -1,0 +1,43 @@
+.header_category {
+    width: 90%;
+    margin: 0px auto 50px auto;
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+}
+
+    .titulo, .ordenarPor, .paginado {
+        display: flex;
+        align-items: center;
+    }
+
+    .ordenarPor {
+        width: 30%;
+        margin: 0px 30px 0px auto;
+    }
+
+        label {
+            width: 30%;
+            font-size: 1rem;
+            color: darkgray;
+        }
+
+        select {
+            width: 70%;
+            height: 70%;
+            text-align: center;
+            border-radius: 20px;
+        }
+
+    .titulo {
+        margin-left: 30px;
+    }
+
+        p {
+            margin: 0 5px;
+        }
+
+        .arrow_right {
+            margin: 0 5px;
+        }
+

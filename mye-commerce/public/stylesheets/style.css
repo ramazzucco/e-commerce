@@ -1,5 +1,5 @@
 :root {
-  --bgColorPrimario: #CCCCFF;
+  --bgColorPrimario: rgb(204, 204, 255);
   --fontSize: 1.3rem;
   --color: #6f6fff;
   --colorHover: blueviolet;
@@ -121,6 +121,7 @@ a {
     .navbar-pages ul{
       width: 100%;
       background-color: white;
+      position: absolute;
     }
 
       .navbar-pages li{
@@ -135,6 +136,26 @@ a {
         background-color: var(--bgColorHover);
         border-radius: 50px;
         padding: 5px 100px;
+      }
+
+      .subMenu {
+        display: none;
+        flex-direction: column;
+        position: relative;
+        left: 370px;
+        top:  34px;
+      }
+
+      .navbar-pages li:hover > .subMenu {
+        display: flex;
+        width: 20%;
+        border-radius: 15px 15px 20px 20px;
+        transition: all 0.5s linear;
+
+      }
+
+      .subMenu li {
+        transition: all 0.5s linear;
       }
 
     .buttonCollapse {
@@ -221,7 +242,6 @@ a {
     padding: 20px;
     width: 100%;
     height: 400px;
-    box-shadow: inset 0px 0px 10px 10px rgba(255, 0, 0, 0.2)
   }
 
   .email, .password, .submit {
@@ -396,16 +416,13 @@ a {
         img {
           width: 100%;
         }
-      .hr_cards {
-        width: 90%;
-        margin: 0px;
-        color: var(--bgColorPrimario);
-      }
+
       .content {
         width: 90%;
         background-color: #a0a0ff;
         padding: 30px 5px;
         text-align: center;
+        border-top: 2px solid var(--bgColorPrimario)
       }
         p {
           display: inline;
@@ -483,5 +500,28 @@ a {
 @media(max-width: 550px){
   .cards {
     min-width: 90%;
+  }
+
+  .navbar-pages ul{
+    position: relative;
+  }
+
+  .subMenu {
+    display: none;
+    flex-direction: column;
+    position: relative;
+    left: 0px;
+    top: 0px;
+  }
+
+  .navbar-pages li:hover > .subMenu {
+    width: 5%;
+    border-radius: 0px ;
+    background-color: var(--bgColorHover);
+  }
+
+  .navbar-pages li:hover > .subMenu li{
+    border-radius: 0px 20px 20px 0px;
+    position: relative;
   }
 }

@@ -82,6 +82,26 @@ window.onload = () => {
                     modal.style.display = "none";
                 }
             }
+            let input = document.querySelectorAll("form input");
+            input.forEach( element => {
+                if(element.value != ""){
+                    element.style.borderBottom = "black solid 2px"
+                }
+                element.onblur = () => {
+        
+                   if(element.value != ""){
+                       element.style.borderBottom = "black solid 2px"
+                    }
+                }
+            })
+            let enviar = document.querySelector(".button_login");
+            enviar.onclick = () => {
+                let email = document.getElementById("email");
+                let password = document.getElementById("password");
+                // if(email.value != "" && password.value != ""){
+                //     document.querySelector(".form").style.boxShadow = `inset 0px 0px 10px 10px rgba(0, 255, 0, 0.5)`
+                // }
+            }
     }
 
     //===============================================BODY _ BODY _ BODY=============================================//
