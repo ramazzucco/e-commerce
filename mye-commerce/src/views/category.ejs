@@ -1,24 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <%- include("partials/head") %>
     <link rel="stylesheet" href="/stylesheets/category.css" />
 </head>
+
 <body>
     <%- include("partials/header") %>
     <div class="container">
         <div class="header_category">
             <div class="titulo">
-                <h2>Celulares ( 33 )</h2>
-            </div>
-            <div class="ordenarPor">
-                <label for="ordenarPor">Ordenar por : </label>
-                <select name="ordenarPor" id="ordenarPor">
-                    <option value="">Nombre Ascendente</option>
-                    <option value="">Nombre Descendente</option>
-                    <option value="">Precio Ascendente</option>
-                    <option value="">Precio Descendente</option>
-                </select>
+                <% if(typeof title != "undefined") { %>
+                <h2>Su busqueda: <span>"<%= title %>"</span></h2>
+                <% } else { %>
+                <h2><%= category[0].title %> ( <%= products.length %> )</h2>
+                <% } %>
             </div>
             <div class="paginado">
                 <p>1</p>
@@ -26,19 +23,62 @@
                 <span class="material-icons arrow_right">arrow_right</span>
             </div>
         </div>
+        <div class="ordenarPor">
+            <label for="orderby">Ordenar por : </label>
+            <% if(typeof title != "undefined") { %>
+            <form class="orderBy" action="/orderBy" method="POST">
+                <select name="orderby" onchange="this.form.submit()">
+                    <option data="" value="{orderBy: nombre ascendente, product: <%= title %>}">Nombre Ascendente
+                    </option>
+                    <option data="<%= title %>" value="nombre descendente">Nombre Descendente</option>
+                    <option data="<%= title %>" value="precio ascendente">Precio Ascendente</option>
+                    <option data="<%= title %>" value="precio descendente">Precio Descendente</option>
+                </select>
+            </form>
+            <% } else { %>
+            <form class="orderBy" action="/orderBy" method="POST">
+                <select name="orderby" onchange="this.form.submit()">
+                    <option data-search="<%= category[0].title %>" value="nombre ascendente">Nombre Ascendente
+                    </option>
+                    <option data-search="<%= category[0].title %>" value="nombre descendente">Nombre Descendente
+                    </option>
+                    <option data-search="<%= category[0].title %>" value="precio ascendente">Precio Ascendente
+                    </option>
+                    <option data-search="<%= category[0].title %>" value="precio descendente">Precio Descendente
+                    </option>
+                </select>
+            </form>
+            <% } %>
+        </div>
         <div class="container_cards">
-            <div class="cards">
-                <div class="image">
-                    <a href="/products/:category/:id"><img src="/images/samsumng_S20.webp" alt=""></a>
-                </div>
-                <div class="content">
-                    <p>Nombre Producto</p>
-                    <p>$3000</p><span>50% OFF</span>
-                </div>
+            <% for(product of products) { %>
+            <div class="cards prod<%= product.id %>">
+                <i class="fas fa-cart-plus" data-id="<%= product.id %>"></i>
+                <a href="/products/<%= product.category_id %>/<%= product.id %>">
+                    <div class="image">
+                        <img class="item_image" src="/images/<%= product.image %>" alt="<%= product.name %>">
+                    </div>
+                    <div class="content">
+                        <div class="name">
+                            <p class="item_name"><%= product.name %></p>
+                        </div>
+                        <% if(product.discount > 0) { %>
+                        <div class="price">
+                            <p class="item_price">$ <%= product.price %><span><%= product.discount %>% OFF</span></p>
+                        </div>
+                        <% } else { %>
+                        <div class="price">
+                            <p class="item_price">$ <%= product.price %></p>
+                        </div>
+                        <% } %>
+                    </div>
+                </a>
             </div>
+            <% } %>
         </div>
     </div>
     <%- include("partials/footer") %>
     <%- include("partials/scripts") %>
 </body>
+
 </html>

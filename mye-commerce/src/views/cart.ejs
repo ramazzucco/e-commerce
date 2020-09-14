@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("partials/head") %>
+    <link rel="stylesheet" href="/stylesheets/cart.css">
+</head>
+
+<body>
+    <%- include("partials/header") %>
+    <div class="container">
+        <form action="/generar_preferencia" method="POST" data-summary-product-label="4 productos"
+        >
+            <div class="cart">
+                <div class="title_cart">
+                    <h2>Mis Compras</h2>
+                </div>
+                <div class="products">
+                    <% for(product of products) { %>
+                    <div class="singleProduct" data-id="<%= product.id %> ">
+                        <div class="image_cart_page">
+                            <img src="/images/<%= product.image %>" alt="">
+                        </div>
+                        <div class="cart_content">
+                            <h3><%= product.name %> </h3>
+                            <h6>$ <span><%= product.price %></span></h6>
+                            <h5><span><%= product.discount %></span> % OFF</h5>
+                        </div>
+                        <div class="quantity">
+                            <label for="quantity">Cantidad: </label>
+                            <select name="quantity" id="quantity<%= product.id %> ">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                <option value="7">7</option>
+                                <option value="8">8</option>
+                                <option value="9">9</option>
+                                <option value="10">10</option>
+                            </select>
+                            <input type="number" name="id"  value="<%= product.id %>" style="display: none;">
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+                <div class="subTotals">
+                        <% products.forEach((product,i) => { %>
+                        <div class="oneSubTotal">
+                            <p class="price id<%= product.id %>"> $ <span><%= priceWithDiscount[i] %></span> - </p>
+                        </div>
+                    <% }); %>
+                </div>
+                <div class="total_price">
+                    <h3>Total: </h3><h3>$ <span><%= totalPrice.toFixed(2) %></span></h3>
+                </div>
+            </div>
+            <div class="buy_cart">
+                <div class="image_mercadoPago">
+                    <img src="/images/mercadopago_imagen.png" alt="pagar_mercado_pago">
+                </div>
+                <div class="button_buy">
+                    <button type="submit">Comprar</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <%- include("partials/scripts") %>
+    <%- include("partials/footer") %>
+</body>
+
+</html>

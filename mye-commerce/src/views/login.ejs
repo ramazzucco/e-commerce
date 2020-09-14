@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/head") %>
+    <link rel="stylesheet" href="/stylesheets/login.css">
+</head>
+<body>
+    <div class="container_form_login">
+        <form action="/users/login" class="form-login" method="POST">
+            <div class="image_login">
+                <img src="/images/avatars/avatardefault.png" alt="">
+            </div>
+            <h1 class="encabezado">LOGIN</h1>
+            <% if(typeof errors != "undefined") { %>
+                <div class="email">
+                    <input type="text" name="email" id="email" placeholder="ingrese el E-MAIL">
+                </div>
+                <% for(error of errors) { %>
+                    <% if(error.param == "email") { %>
+                    <div class="email invalid-feedback">
+                        <i class="fas fa-exclamation-circle"></i><p><%= error.msg %></p>
+                    </div>
+                    <% } %>
+                <% } %>
+                <div class="password">
+                    <input type="password" name="password" id="password" placeholder="ingrese el PASSWORD">
+                </div>
+                <% for(error of errors) { %>
+                    <% if(error.param == "password") { %>
+                        <div class="password invalid-feedback">
+                            <i class="fas fa-exclamation-circle"></i><p><%= error.msg %></p>
+                        </div>
+                    <% } %>
+                <% } %>
+            <% } else { %>
+                <div class="email">
+                    <input type="text" name="email" id="email" placeholder="ingrese el E-MAIL">
+                </div>
+                <div class="email invalid-feedback"></div>
+                <div class="password">
+                    <input type="password" name="password" id="password" placeholder="ingrese el PASSWORD">
+                </div>
+                <div class="password invalid-feedback"></div>
+            <% } %> 
+            <div class="rememberme">
+                <label for="rememberme">Recordame</label>
+                <input type="checkbox" name="rememberme" id="rememberme">
+            </div>
+            <div class="submit">
+                <button class="button_login" type="submit">ENVIAR</button>
+            </div>
+            <div class="volver">
+                <a href="/">Volver</a>
+            </div>
+        </form>
+    </div>
+    <%- include("partials/scripts") %>
+    <script src="/javascripts/validatorFrontLogin.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("partials/head") %>
+</head>
+
+<body>
+    <div class="container">
+        <div class="form_header">
+            <div class="title">
+                <h1>Nuevo producto</h1>
+            </div>
+        </div>
+        <form class="form_edit" action="/products/create/" method="POST" enctype="multipart/form-data">
+            <div class="category">
+                <label for="inputCategory">Categoria: *</label>
+                <div>
+                    <select name="category" id="inputCategory">
+                        <% for(category of categorys) { %>
+                        <option value="<%= category.id %>"><%= category.title %></option>
+                        <% } %>
+                    </select>
+                </div>
+                <div class="errors">
+                    <ul>
+                        <% if(typeof errors != 'undefined') { %>
+                        <% for(let i = 0; i < errors.length; i++) { %>
+                        <li><%= errors[i].msg %> </li>
+                        <% } %>
+                        <% } %>
+                    </ul>
+                </div>
+            </div>
+            <div class="name">
+                <label for="inputName">Nombre del Producto: *</label>
+                <div class="">
+                    <input type="text"  id="inputName" name="name" value="">
+                    <div class="name invalid-feedback"></div>
+                </div>
+            </div>
+            <div class="price">
+                <label for="inputPrice">Price: *</label>
+                <div class="col-sm-7">
+                    <input type="number" id="inputPrice" name="price" value="">
+                    <div class="price invalid-feedback"></div>
+                </div>
+            </div>
+            <div class="description">
+                <label for="inputDescription">Descripcion: *</label>
+                <div class="">
+                    <textarea type="text"  id="inputDescription" name="description" value=""></textarea>
+                    <div class="description invalid-feedback"></div>
+                </div>
+            </div>
+            <div class="stock">
+                <label for="inputStock">stock: *</label>
+                <div class="col-sm-7">
+                    <input type="number" id="inputStock" name="stock" value="">
+                    <div class="stock invalid-feedback"></div>
+                </div>
+            </div>
+            <div class="discount">
+                <label for="inputDiscount">discount: *</label>
+                <div class="col-sm-7">
+                    <input type="number" id="inputDiscount" name="discount" value="">
+                    <div class="discount invalid-feedback"></div>
+                </div>
+            </div>
+            <div class="image">
+                <label for="image">Imagen: </label>
+                <input id="image" type="file" name="image" value="" placeholder="">
+                <% if(typeof errors != 'undefined') { %>
+                <div>
+                    <p><%= errors.error %> </p>
+                </div>
+                <% } %>
+            </div>
+            <div class="button_form_create">
+                <button type="submit">Crear</button>
+            </div>
+        </form>
+        <div class="voler">
+            <a href="/users/admin/<%= user.id %>"><button>Volver</button></a>
+        </div>
+    </div>
+</body>
+
+</html>

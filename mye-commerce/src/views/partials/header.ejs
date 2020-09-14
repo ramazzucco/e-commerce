@@ -1,5 +1,6 @@
 <header>
     <div class="container">
+        <div class="cantProduct"></div>
         <div class="navbar-users">
             <div class="brand">
                 <a href="#">
@@ -7,82 +8,72 @@
                 </a>
             </div>
             <div class="search">
-                <input type="text" placeholder="Buscar productos">
-                <div class="icon-search"><i class="material-icons">search</i></div>
-            </div>
-            <div class="navbar-login">
-                <form action="" method="post">
-                    <input type="text" placeholder="e-mail">
-                    <input type="password" placeholder="Contraseña">
+                <form action="/search" method="get">
+                    <input type="text" name="search" placeholder="Buscar productos">
+                    <button type="submit" class="icon-search"><i class="material-icons">search</i></button>
                 </form>
             </div>
-            <!-- The Modal -->
-            <div id="myModal" class="modal">
-
-                <!-- Modal content -->
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <form action="" class="form">
-                            <span class="close">&times;</span>
-                            <h1 class="encabezado">LOGIN</h1>
-                            <div class="email">
-                                <input type="text" name="email" id="email" placeholder="ingrese el E-MAIL">
-                            </div>
-                            <div class="password">
-                                <input type="password" name="password" id="password" placeholder="ingrese el PASSWORD">
-                            </div>
-                            <div class="submit">
-                                <button class="button_login" type="button">ENVIAR</button>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-            </div>
             <div class="navbar-icons">
-                <ul>
-                    <li><a href="#"><i class="material-icons icon-login">account_circle</i></a></li>
-                    <li><a href="#"><i class="material-icons icon-cart">shopping_cart</i></a></li>
-                </ul>
+                    <% if(user) { %>
+                        <% if(user.status == 2) { %>
+                            <div class="icon_user"><a href="/users/admin/<%= user.id %>"><i class="material-icons icon-login">account_circle</i></a></div>
+                    <% } else { %>
+                        <div class="icon_logout"><a href="/users/logout">Logout</a></div>
+                        <div class="icon_user"><a href="/users/profile/<%= user.id %> "><i class="material-icons icon-login" data-user="session">account_circle</i></a></div>
+                    <% } %>
+                <% } else { %>
+                    <div class="icon_user"><a href="/users/login"><i class="material-icons icon-login">account_circle</i></a></div>
+                <% } %>
+                    <div class="icon_cart"><i class="material-icons icon-cart">shopping_cart</i></div>
             </div>
         </div>
         <div class="navbar-pages">
-            <div class="buttonCollapse">
-                <i class="material-icons icon-menu">menu</i>
+            <div class="navBar-column">
+                <div class="buttonCollapse">
+                    <i class="material-icons icon-menu">menu</i>
+                </div>
+                <div>
+                    <ul id="menu-column">
+                        <li>
+                            <a href="#">Categorias</a>
+                            <ul class="subMenu">
+                                <% for(category of categorys) { %> 
+                                <li><a href="/products/<%= category.id %>"><%= category.title %></a></li>
+                            <% } %>
+                            </ul>
+                        </li>
+                        <li><a href="/">Home</a></li>
+                        <li><a href="#">Contacto</a></li>
+                        <li><a href="/users/register">Registrarse</a></li>
+                    </ul>
+                </div>
             </div>
-            <div  >
-                <ul id="menu-column">
-                    <li><a href="/">Home</a></li>
-                    <li>
-                        <a href="#">Categorias</a>
-                        <ul class="subMenu">
-                            <li><a href="/products/celulares">Celulares</a></li>
-                            <li><a href="/products/laptops">Laptops</a></li>
-                            <li><a href="/products/parlantes">Parlantes</a></li>
-                            <li><a href="/products/teclados">Teclados</a></li>
-                            <li><a href="/products/mouse">Mouse</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">Contacto</a></li>
-                    <li><a href="#">Registrarse</a></li>
-                </ul>
+            <div class="navBar-inline">
+                <div class="categorys">
+                    <a href="#">Categorias</a>
+                    <ul class="subMenu">
+                        <% for(category of categorys) { %> 
+                        <li><a href="/products/<%= category.id %>"><%= category.title %></a></li>
+                    <% } %> 
+                    </ul>
+                </div>
+                <div class="navbar-items">
+                    <ul  id="menu-inline">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="#">Contacto</a></li>
+                        <li><a href="/users/register">Registrarse</a></li>
+                    </ul>
+                </div>
             </div>
-            <div>
-                <ul  id="menu-inline">
-                    <li><a href="/">Home</a></li>
-                    <li>
-                        <a href="#">Categorias</a>
-                        <ul class="subMenu">
-                            <li><a href="#">Celulares</a></li>
-                            <li><a href="#">Laptops</a></li>
-                            <li><a href="#">Parlantes</a></li>
-                            <li><a href="#">Teclados</a></li>
-                            <li><a href="#">Mouse</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#">Contacto</a></li>
-                    <li><a href="#">Registrarse</a></li>
-                </ul>
+        </div>
+        <div class="container_cart">
+            <div class="products_cart">
+                <h4>Carrito de compras</h4>
+                <div class="oneProduct"></div>
+                <form class="form_cart" action="/products/cart" method="post">
+                    <button onclick="this.submit()">Ir al carrito</button>
+                </form>
+                <button class="clear_cart">Vaciar carrito</button>
             </div>
         </div>
     </div>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("partials/head") %>
+    <link rel="stylesheet" href="/stylesheets/register.css">
+</head>
+
+<body>
+        <div class="container_form_register">
+            <form class="form-register" action="/users/register" method="POST" enctype="multipart/form-data">
+                <div class="encabezado">
+                    <div class="titulo">
+                        <h1>Formulario de registro</h1>
+                    </div>
+                    
+                </div>
+            <% if(typeof errors != "undefined") { %>
+                <div class="form-group">
+                    <input type="text" name="first_name" class="form-control" id="inputName">
+                    <label for="inputName">Nombre: *</label>
+                    <% for(error of errors) { %>
+                        <% if(error.param == "first_name") { %>
+                        <div class="first_name invalid-feedback">
+                            <i class="fas fa-exclamation-circle"></i><p><%= error.msg %></p>
+                        </div>
+                        <% } %>
+                    <% } %>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" name="last_name" class="form-control" id="inputLastName">
+                    <label for="inputLastName">Apellido: *</label>
+                    <% for(error of errors) { %>
+                        <% if(error.param == "last_name") { %>
+                        <div class="last_name invalid-feedback">
+                            <i class="fas fa-exclamation-circle"></i><p><%= error.msg %></p>
+                        </div>
+                        <% } %>
+                    <% } %>
+                </div>
+
+                <div class="form-group">
+                    <input type="email" name="email" class="form-control" id="inputEmail">
+                    <label for="inputEmail">E-mail: *</label>
+                    <% for(error of errors) { %>
+                        <% if(error.param == "email") { %>
+                        <div class="email invalid-feedback">
+                            <i class="fas fa-exclamation-circle"></i><p><%= error.msg %></p>
+                        </div>
+                        <% } %>
+                    <% } %>
+                </div>
+
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" id="inputPassword">
+                    <label for="inputPassword">Contraseña: *</label>
+                    <% for(error of errors) { %>
+                        <% if(error.param == "password") { %>
+                        <div class="password invalid-feedback">
+                            <i class="fas fa-exclamation-circle"></i><p><%= error.msg %></p>
+                        </div>
+                        <% } %>
+                    <% } %>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" name="address" class="form-control" id="inputAddress">
+                    <label for="inputAddress">Direccion: </label>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" name="city" class="form-control" id="inputCity">
+                    <label for="inputCity">Localidad: </label>
+                </div>
+
+                <div class="form-group">
+                    <input type="file" id="inputImage" name="avatar" id="inputAvatar"
+                        accept="image/jpg, image/png, image/jpeg">
+                    <label>Foto de perfil: </label>
+                    <% for(error of errors) { %>
+                        <% if(error.param == "avatar") { %>
+                        <div class="avatar invalid-feedback">
+                            <i class="fas fa-exclamation-circle"></i><p><%= error.msg %></p>
+                        </div>
+                        <% } %>
+                    <% } %>
+                </div>
+                <div>
+                    <input style="display: none" type="text" name="status" value="0">
+                </div>
+            <% } else { %>
+                <div class="form-group">
+                    <input type="text" name="first_name" class="form-control" id="inputName">
+                    <label for="inputName">Nombre: *</label>
+                    <div class="first_name invalid-feedback"></div>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="last_name" class="form-control" id="inputLastName">
+                    <label for="inputLastName">Apellido: *</label>
+                    <div class="last_name invalid-feedback"></div>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" class="form-control" id="inputEmail">
+                    <label for="inputEmail">E-mail: *</label>
+                    <div class="email invalid-feedback"></div>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="password" class="form-control" id="inputPassword">
+                    <label for="inputPassword">Contraseña: *</label>
+                    <div class="password invalid-feedback"></div>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="address" class="form-control" id="inputAddress">
+                    <label for="inputAddress">Direccion: </label>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="city" class="form-control" id="inputCity">
+                    <label for="inputCity">Localidad: </label>
+                </div>
+                <div class="form-group">
+                    <input type="file" id="inputImage" name="avatar" id="inputAvatar"
+                        accept="image/jpg, image/png, image/jpeg">
+                    <label>Foto de perfil: </label>
+                </div>
+                <div>
+                    <input style="display: none" type="text" name="status" value="0">
+                </div>
+                <% } %> 
+                <div class="form-group">
+                    <button class="button_register" type="submit">Enviar</button>
+                </div>
+                <div class="volver">
+                    <a href="/">Volver</a>
+                </div>
+            </form>
+           
+        </div>
+    <%- include("partials/scripts") %>
+    <script src="/javascripts/validatorFrontRegister.js"></script>
+</body>
+
+</html>

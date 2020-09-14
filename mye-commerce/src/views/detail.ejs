@@ -1,14 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <%- include("partials/head") %>
+    <link rel="stylesheet" href="/stylesheets/detail.css">
 </head>
+
 <body>
     <%- include("partials/header") %>
     <div class="container">
-        
+        <h2>Detelle:  <%= product.name %></h2>
+        <div class="card_detail">
+            <div class="image">
+                <img src="/images/<%= product.image %>" alt="<%= product.name %>" width="500px">
+            </div>
+            <div class="info">
+                <h3><%= product.name %></h3>
+                <div class="price">
+                    <% if(product.discount > 0) { %>
+                        <p class="oldPrice">$ <%= product.price %></p><span><%= product.discount %>% OFF</span>
+                    <% } %> 
+                </div>
+                <div class="priceWithDiscount">
+                    <p>$ <%= priceWithDiscount %></p>
+                </div>
+                <form action="/generar_preferencia" method="POST" data-summary-product-label="4 productos">
+                    <div class="quantity">
+                        <label for="quantity"> Cantidad </label>
+                        <select name="quantity" id="quantity">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                            <option value="8">8</option>
+                            <option value="9">9</option>
+                            <option value="10">10</option>
+                        </select>
+                    </div>
+                    <input type="number" name="id"  value="<%= product.id %>" style="display: none;">
+                    <button class="button_buy" type="submit"> Comprar </button>
+                </form>
+            </div>
+        </div>
+        <div class="description">
+            <h2>Descripcion : </h2>
+            <p><%= product.description %></p>
+        </div>
+        <div class="messages">
+            <div class="title">
+                <h5>Mensajes:</h5>
+            </div>
+            <div class="content_messages">
+                <div class="messagesOnDb">
+                    <% for(message of messages) { %>
+                    <div class="oneMessage">
+                        <p><%= message.content %> </p>
+                    </div>
+                    <% } %> 
+                </div>
+                <form action="/products/messages" method="post">
+                    <input type="number" name="category_id"  value="<%= product.category_id %>" style="display: none;">
+                    <input type="number" name="users_id"  value="<%= user.id %>" style="display: none;">
+                    <textarea name="content" cols="100" rows="10"></textarea>
+                    <input type="number" name="products_id"  value="<%= product.id %>" style="display: none;">
+                    <button type="submit" onclick="this.form.submit()">Enviar</button>
+                </form>
+            </div>
+        </div>
     </div>
     <%- include("partials/footer") %>
     <%- include("partials/scripts") %>
 </body>
+
 </html>

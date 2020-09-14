@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/head") %>
+    <link rel="stylesheet" href="/stylesheets/admin.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header_admin">
+            <div class="title_admin">
+                <h2>Panel de control</h2>
+            </div>
+            <div class="search">
+                <input type="text" placeholder="Buscar productos">
+                <div class="icon-search"><i class="material-icons">search</i></div>
+            </div>
+            <div class="logut">
+                <a href="/users/logout"><button class="button_admin_logut">Logout</button></a>
+            </div>
+        </div>
+        <div class="body_admin">
+            <div class="sideBar">
+                <div class="img_admin">
+                    <img src="/images/avatars/<%= user.avatar %>" alt="user image">
+                </div>
+                <div class="name_admin">
+                    <p><%= user.first_name %> <%= user.last_name %></p>
+                </div>
+                <div class="buttons">
+                    <div class="sideBar_button" data-title="products">
+                        <h4>Productos</h4>
+                    </div>
+                    <div class="sideBar_button" data-title="new_products">
+                        <a href="/products/create/"><h4>Nuevo producto</h4></a>
+                    </div>
+                    <div class="sideBar_button" data-title="users">
+                        <h4>Usuarios</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="main_admin">
+                <div class="items products" data-items="products">
+                    <div class="products_title">
+                            <p class="id">Id</p>
+                            <p class="category">Categoria</p>
+                            <p class="name">Nombre de producto</p>
+                            <p class="price">Precio</p>
+                            <p class="stock">Stock</p>
+                            <p class="discount">% OFF</p>
+                    </div>
+                    <% for(product of products) { %> 
+                    <div class="oneProduct">
+                        <div class="id">
+                            <a href="/products/<%= product.category_id %>/<%= product.id %>"><p><%= product.id %></p></a>
+                            <div>
+                                <form class="form_delete_product" action="/products/delete/<%= product.id %>?_method=DELETE" method="POST">
+                                    <button class="button_form_delete" type="submit">Eliminar</button>
+                                </form>
+                            </div>
+                            <div>
+                                <a href="/products/edit/<%= product.id %>"><button class="button_modify" type="button">Modificar</button></a>
+                            </div>
+                        </div>
+                        <div class="category">
+                            <p><%= product.category.title %></p>
+                        </div>
+                        <div class="name">
+                            <p><%= product.name %> </p>
+                        </div>
+                        <div class="price">
+                            <p>$ <%= product.price %> </p>
+                        </div>
+                        <div class="stock">
+                            <p><%= product.stock %> </p>
+                        </div>
+                        <div class="discount">
+                            <p><%= product.discount %></p>
+                        </div>
+                    </div>
+                <% } %> 
+                </div>
+                <div class="items edit" data-items="edit">
+                    <form class="form_edit" action="/products/edit/" method="post" enctype="multipart/form-data">
+
+                    </form>
+                </div>
+                <div class="items users" data-items="users">
+                    <div class="users_title">
+                            <p class="id">Id</p>
+                            <p class="first_name">Nombre</p>
+                            <p class="last_name">Apellido</p>
+                            <p class="email">Email</p>
+                            <p class="address">Direccion</p>
+                            <p class="city">Ciudad</p>
+                    </div>
+                    <% for(user of users) { %> 
+                    <div class="oneUser">
+                        <div class="id">
+                            <p><%= user.id %></p>
+                        </div>
+                        <div class="first_name">
+                            <p><%= user.first_name %></p>
+                        </div>
+                        <div class="last_name">
+                            <p><%= user.last_name %> </p>
+                        </div>
+                        <div class="email">
+                            <p><%= user.email %> </p>
+                        </div>
+                        <div class="address">
+                            <p><%= user.address %> </p>
+                        </div>
+                        <div class="city">
+                            <p><%= user.city %></p>
+                        </div>
+                    </div>
+                <% } %> 
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+    <script src="/javascripts/admin.js"></script>
+</body>
+</html>

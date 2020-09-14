@@ -1,6 +1,5 @@
 window.onload = () => {
     //========================================HEADER _ HEADER _ HEADER==============================================//
-
     //--------------  INPUT SEARCH -----------------------------//
     let input = document.querySelector(".search input");
     let iconSearch = document.querySelector(".icon-search");
@@ -30,7 +29,7 @@ window.onload = () => {
         }
     };
 
-    if (pantalla < 611) {
+    if (pantalla < 768) {
         menuColumn();
     } else {
         menuInline();
@@ -39,72 +38,53 @@ window.onload = () => {
     // --SACA EL BOTON MENU Y PONE EL MENU INLINE----//
     function menuInline() {
         document.querySelector(".buttonCollapse").setAttribute("style", "display: none;");
-        document.getElementById("menu-column").removeAttribute("style");
+        document.querySelector(".navBar-inline").removeAttribute("style");
         document.getElementById("menu-inline").setAttribute("style", "display: flex;");
+        document.querySelector(".navBar-inline").setAttribute("style", "display: flex")
+        document.getElementById("menu-column").removeAttribute("style")
     }
 
     // ----SACA EL MENU INLINE Y PONE EL BOTON MENU ----//
     function menuColumn() {
         document.querySelector(".buttonCollapse").setAttribute("style", "display: flex;");
-        document.getElementById("menu-inline").setAttribute("style", "display: none;");
+        document.querySelector(".navBar-inline").setAttribute("style", "display: none;");
     }
 
     // -CAMBIA EL MENU SEGUN EL TAMAÑO DE PANTALLA-//
     window.onresize = () => {
         // console.log(window.screen.width)
-        if (window.screen.width < 611) {
+        if (window.screen.width < 768) {
             menuColumn();
         } else {
             menuInline();
         }
     };
-    //------------------------COLOCA EL FORMULARIO DE LOGEO-------------------------//
+
     const login = document.querySelector(".material-icons.icon-login");
-    if (login) {
-            var modal = document.getElementById("myModal");
 
-            // Get the <span> element that closes the modal
-            var span = document.getElementsByClassName("close")[0];
-
-            // When the user clicks the button, open the modal 
-            login.onclick = function() {
-                modal.style.display = "block";
-            }
-
-            // When the user clicks on <span> (x), close the modal
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
-
-            // When the user clicks anywhere outside of the modal, close it
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
-            let input = document.querySelectorAll("form input");
-            input.forEach( element => {
-                if(element.value != ""){
-                    element.style.borderBottom = "black solid 2px"
-                }
-                element.onblur = () => {
-        
-                   if(element.value != ""){
-                       element.style.borderBottom = "black solid 2px"
-                    }
-                }
-            })
-            let enviar = document.querySelector(".button_login");
-            enviar.onclick = () => {
-                let email = document.getElementById("email");
-                let password = document.getElementById("password");
-                // if(email.value != "" && password.value != ""){
-                //     document.querySelector(".form").style.boxShadow = `inset 0px 0px 10px 10px rgba(0, 255, 0, 0.5)`
-                // }
-            }
+    if(login.hasAttribute("data-user")){
+        login.classList.add("loginOn")
     }
 
-    //===============================================BODY _ BODY _ BODY=============================================//
+    //----------------------   ABRIR Y CERRAR CARRITO   -------------------------//
+
+    const cartIcon = document.querySelector(".icon-cart");
+    const cartContainer = document.querySelector(".container_cart");
+
+    if(cartIcon){
+        cartIcon.onclick = () => {
+            if(cartContainer.hasAttribute("style") == false){
+                cartIcon.classList.add("loginOn");
+                cartContainer.setAttribute("style","display: flex");
+            } else {
+                cartContainer.removeAttribute("style");
+                cartIcon.classList.remove("loginOn");
+            }
+        }
+
+    }
+    
+    //==========================================BODY _ BODY _ BODY=============================================//
 
     //-------------------------------- SLIDER AUTOMATICO Y MANUAL-------------------------------//
     $(function(){
@@ -126,4 +106,146 @@ window.onload = () => {
         });
     });
 
+    //------------   MODIFICAR LA CANTIDAD DE PRODUCTOS A COMPRAR EN EL CARRITO--------//
+
+    const singleProduct = document.querySelectorAll(".singleProduct");
+
+    singleProduct.forEach( product => {
+
+        const id = product.getAttribute("data-id");
+        const price = product.querySelector(".cart_content h6 span").innerHTML;
+        const discount = product.querySelector(".cart_content h5 span").innerHTML;
+        const quantity = document.getElementById(`quantity${id}`);
+        const oneSubTotal = document.querySelector(`.price.id${id} span`);
+        const totalPrice = document.querySelector(".total_price h3 span");
+        quantity.onchange = () => {
+
+            const subTotal = ((Number(price) - ( Number(price) * Number(discount) ) / 100 )) * Number(quantity.value);
+            oneSubTotal.innerHTML = subTotal.toFixed(2);
+            const subtotales = document.querySelectorAll(".price span")
+
+            let total = 0;
+            subtotales.forEach(subtotal => {
+                total += Number(subtotal.innerHTML);
+            })
+            totalPrice.innerHTML = total.toFixed(2);
+
+        }
+
+    })
+
+ //---------------------------------- AGREGAR AL CARRITO ----------------------------------------//
+
+    const iconAdd = document.querySelectorAll(".fa-cart-plus");
+
+    if(sessionStorage.cart){
+        document.querySelector(".oneProduct").innerHTML = sessionStorage.getItem("cart");
+        document.querySelector(".form_cart").innerHTML += sessionStorage.getItem("itemsId");
+    }
+
+    let items = [];
+    let itemsId = [];
+
+    iconAdd.forEach( element => {
+
+        element.onclick = () => {
+
+            const id = element.getAttribute("data-id");
+            const image = document.querySelector(`.prod${id} .item_image`);
+            const name = document.querySelector(`.prod${id} .item_name`);
+            const price = document.querySelector(`.prod${id} .item_price`);
+
+            if(!sessionStorage.cart){
+
+                items.push(`<div class="row"><div class="image_cart"><img src="${image.src}" alt=""></div><div class="content_cart"><h3>${name.innerHTML}</h3><p>${price.innerHTML}</p></div></div>`);
+                itemsId.push(`<input name="id" style="display: none;" value="${id}">`);
+                sessionStorage.setItem("cart",`${items}`);
+                sessionStorage.setItem("itemsId",`${itemsId}`);
+
+            } else {
+
+                items = [];
+                itemsId = [];
+                const sessionItems = sessionStorage.getItem("cart");
+                const sessionItemsId = sessionStorage.getItem("itemsId");
+                items.push(`<div class="row"><div class="image_cart"><img src="${image.src}" alt=""></div><div class="content_cart"><h3>${name.innerHTML}</h3><p>${price.innerHTML}</p></div></div>`, sessionItems);
+                itemsId.push(`<input name="id" style="display: none;" value="${id}">`, sessionItemsId);
+                // items.push(sessionItems);
+                // itemsId.push(sessionItemsId);
+                sessionStorage.setItem("cart",`${items}`);
+                sessionStorage.setItem("itemsId",`${itemsId}`);
+
+            }
+
+            document.querySelector(".oneProduct").innerHTML = items.join("");
+            document.querySelector(".form_cart").innerHTML += itemsId.join("");
+
+        }
+
+        const clearCart = document.querySelector(".clear_cart");
+        clearCart.onclick = () => {
+
+            sessionStorage.clear("cart");
+            sessionStorage.clear("itemsId");
+            sessionStorage.clear("cantItems");
+            document.querySelector(".oneProduct").innerHTML = sessionStorage.getItem("cart");
+            document.querySelector(".form_cart").innerHTML += "";
+            location.reload(true);
+
+        }
+        
+    })
+
+    //---------------------------------    PROFILE   ---------------------------------------------//
+    const enableModify = document.querySelector(".eneable_modify");
+
+    if(enableModify){
+        const inputs = document.querySelectorAll(".form_update_profile input");
+        const cancelar = document.querySelector(".disable_modify");
+        const enviar = document.querySelector(".modify_myDates");
+        const buttonsEneabled = document.querySelector(".buttons_eneabled");
+
+        enableModify.onclick = () => {
+
+            enableModify.setAttribute("style","display:none;");
+            buttonsEneabled.setAttribute("style","display: flex;");
+
+            inputs.forEach( input => {
+                input.removeAttribute("disabled")
+            })
+
+        }
+
+        cancelar.onclick = () => {
+
+            buttonsEneabled.removeAttribute("style");
+            enableModify.removeAttribute("style");
+
+            inputs.forEach( input => {
+                input.setAttribute("disabled","")
+            })
+        }
+
+    }
+
+    const enabled = document.querySelectorAll(".enabled_button");
+    console.log(enabled)
+    if(enabled){
+
+        enabled.forEach( button => {
+            const id = button.getAttribute("data-id");
+            button.onclick = () => {
+
+                const detail = document.querySelector(`.id${id}`);
+                // const primaryContent = document.querySelector(`.${id}`)
+                if(detail.hasAttribute("style")){
+                    detail.removeAttribute("style");
+                } else {
+                    detail.setAttribute("style","display: flex;");
+                }
+
+            }
+        })
+
+    }
 };

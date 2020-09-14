@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/head") %>
+</head>
+<body>
+    <%- include("partials/header") %>
+    <link rel="stylesheet" href="/stylesheets/profile.css">
+    <div class="container">
+        <div class="sideBar_profile">
+            <div class="sideBar_button_collapse">
+                <i class="material-icons icon-menu">menu</i>
+            </div>
+            <div class="sidBar_buttons_profile">
+                <div class="dateUser">
+                    <img src="/images/avatars/<%= user.avatar %>" alt="">
+                    <p>Hola!</p><h4><%= user.first_name %> </h4>
+                </div>
+                <div class="enabled_button myDates" data-id="myDates">
+                    <div class="icon_sideBar_profile">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <p>Mis Datos</p>
+                </div>
+                <div class="enabled_button buy" data-id="buy">
+                    <div class="icon_sideBar_profile">
+                        <i class="fas fa-shopping-bag"></i>
+                    </div>
+                    <p>Compras</p>
+                </div>
+                <div class="enabled_button messages" data-id="messages">
+                    <div class="icon_sideBar_profile">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <p>Mensajes</p>
+                </div>
+                <div class="enabled_button notifications" data-id="notifications">
+                    <div class="icon_sideBar_profile">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <p>Notificaciones</p>
+                </div>
+            </div>
+        </div>
+        <div class="content_profile">
+            <div class="content_myDates idmyDates">
+                <form class="form_update_profile" action="/users/?_method=PUT" method="post">
+                    <label for="first_name">Nombre</label>
+                    <input type="text" id="first_name" name="first_name" value="<%= user.first_name %>" disabled>
+
+                    <label for="last_name">Apellido</label>
+                    <input type="text" id="last_name" value="<%= user.last_name %>" disabled>
+
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" value="<%= user.email %> " disabled>
+
+                    <label for="address">Direccion</label>
+                    <input type="text" name="address" id="address" value="<%= user.address %>" disabled>
+
+                    <label for="city">Ciudad</label>
+                    <input type="text" name="city" id="city" value="<%= user.city %> " disabled>
+
+                    <button type="button" class="eneable_modify">Modificar</button>
+                    <div class="buttons_eneabled">
+                        <button type="button" class="disable_modify">Cancelar</button>
+                        <button type="submit" class="modify_myDates">Enviar</button>
+                    </div>
+                </form>
+            </div>
+            <div class="content_purchases idbuy">
+                <% for(purchase of purchases) { %>
+                    <div class="purchase">
+                        <div class="image">
+                            <img src="/images/<%= purchase.image %>" alt="">
+                        </div>
+                        <div class="name">
+                            <h5><%= purchase.name %> </h5>
+                            <p>$ <%= purchase.price %> </p>
+                        </div>
+                        <div class="watchDetail">
+                            <p class="enabled_button verDetalles" data-id="<%= purchase.id %> ">Ver Detelles</p>
+                        </div>
+                    </div>
+                    <div class="purchaseDetail id<%= purchase.id %> ">
+                        <div class="itemDetail"><h5>Detelles de compra:</h5></div>
+                        <div class="itemDetail"><p>Item ID: </p><span><%= purchase.id %> </span></div>
+                        <div class="itemDetail"><p>Orden de compra n°: </p><span><%= purchase.order %> </span></div>
+                        <div class="itemDetail"><p>Precio: </p><span>$ <%= purchase.priceWithoutDiscount %> </span></div>
+                        <div class="itemDetail"><p>Cantidad: </p><span><%= purchase.quantity %> </span></div>
+                        <div class="itemDetail"><p>Descuento:  </p><span><%= purchase.discount %> %</span></div>
+                        <div class="itemDetail"><p>Total: </p><span>$ <%= purchase.price * purchase.quantity %> </span></div>
+                    </div>
+                <% } %>
+                <div class="total_purchases">
+                    <p>Total de compras:</p><span>$ <%  let total=0;
+                    for(purchase of purchases) {
+                        total += Number(purchase.price * purchase.quantity);
+                    } %> <%= total %> </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include("partials/footer") %>
+    <%- include("partials/scripts") %>
+</body>
+</html>
