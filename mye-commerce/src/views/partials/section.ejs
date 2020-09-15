@@ -16,60 +16,24 @@
                  <h2>Productos mas vistos</h2>
             </div>
             <div class="container_cards">
-                <div class="cards">
-                    <div class="image">
-                        <i class="fas fa-cart-plus"></i>
-                        <a href="/products/:category/:id"><img src="/images/samsumng_S20.webp" alt=""></a>
+                <% for(product of masVisitados) { %> 
+                    <div class="cards prod<%= product.id %>">
+                        <i class="fas fa-cart-plus" data-id="<%= product.id %>"></i>
+                        <a href="/products/<%= product.category_id %>/<%= product.id %>">
+                            <div class="image">
+                                <img class="item_image" src="/images/<%= product.image %>" alt="<%= product.name %>">
+                            </div>
+                            <div class="content">
+                                <div class="name">
+                                    <p class="item_name"><%= product.name %></p>
+                                </div>
+                                <div class="price">
+                                    <p class="item_price">$ <%= product.price %><span><%= product.discount %>% OFF</span></p>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                    <div class="content">
-                        <p>Nombre Producto</p>
-                        <p>$3000</p><span>50% OFF</span>
-                    </div>
-                </div>
-                <div class="cards">
-                    <div class="image">
-                        <a href="/products/:category/:id"><img src="/images/dell.png" alt=""></a>
-                    </div>
-                    <div class="content">
-                        <p>Nombre Producto</p>
-                        <p>$5666</p><span>0% OFF</span>
-                    </div>
-                </div>
-                <div class="cards">
-                    <div class="image">
-                        <a href="/products/:category/:id"><img src="/images/Philips-curvo-SuperWide-49.jpg" alt=""></a>
-                    </div>
-                    <div class="content">
-                        <p>Nombre Producto</p>
-                        <p>$3146</p><span>10% OFF</span>
-                    </div>
-                </div>
-                <div class="cards">
-                    <div class="image">
-                        <a href="/products/:category/:id"><img src="/images/Parlante Bluetooth Novik Extreme-x.jpg" alt=""></a>
-                    </div>
-                    <div class="content">
-                        <p>Nombre Producto</p>
-                        <p>$9999</p><span>5% OFF</span>
-                    </div>
-                </div>
-                <div class="cards">
-                    <div class="image">
-                        <a href="/products/:category/:id"><img src="/images/Philips-curvo-SuperWide-49.jpg" alt=""></a>
-                    </div>
-                    <div class="content">
-                        <p>Nombre Producto</p>
-                        <p>$3146</p><span>10% OFF</span>
-                    </div>
-                </div>    <div class="cards">
-                    <div class="image">
-                        <a href="/products/:category/:id"><img src="/images/Philips-curvo-SuperWide-49.jpg" alt=""></a>
-                    </div>
-                    <div class="content">
-                        <p>Nombre Producto</p>
-                        <p>$3146</p><span>10% OFF</span>
-                    </div>
-                </div>
+             <% } %>
              </div>
         </div>
         <hr>

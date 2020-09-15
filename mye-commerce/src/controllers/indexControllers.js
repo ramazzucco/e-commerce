@@ -4,8 +4,20 @@ const { Op } = db.Sequelize;
 const controllers = {
     index: async (req, res) => {
         const products = await db.Product.findAll();
+        const visitasId = await db.Visita.findAll({
+            where: {
+                numero: {
+                    [Op.gt]: 2
+                }
+            }, attributes: ["products_id"]
+        });
+        const masVisitados = await db.Product.findAll({
+            where:{
+                id: visitasId.map( visita => { return visita.products_id })
+            }
+        });
         const categorys = await db.Category.findAll();
-        res.render("index", { categorys, products })
+        res.render("index", { categorys, products, masVisitados })
     },
     search: async (req, res) => {
         const products = await db.Product.findAll({
