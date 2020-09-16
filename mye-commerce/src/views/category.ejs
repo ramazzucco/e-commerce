@@ -14,7 +14,7 @@
                 <% if(typeof title != "undefined") { %>
                 <h2>Su busqueda: <span>"<%= title %>"</span></h2>
                 <% } else { %>
-                <h2><%= category[0].title %> ( <%= products.length %> )</h2>
+                <h2><%= category[0].title %> ( <%= productsByName.length %> )</h2>
                 <% } %>
             </div>
             <div class="paginado">
@@ -26,33 +26,24 @@
         <div class="ordenarPor">
             <label for="orderby">Ordenar por : </label>
             <% if(typeof title != "undefined") { %>
-            <form class="orderBy" action="/orderBy" method="POST">
-                <select name="orderby" onchange="this.form.submit()">
-                    <option data="" value="{orderBy: nombre ascendente, product: <%= title %>}">Nombre Ascendente
-                    </option>
-                    <option data="<%= title %>" value="nombre descendente">Nombre Descendente</option>
-                    <option data="<%= title %>" value="precio ascendente">Precio Ascendente</option>
-                    <option data="<%= title %>" value="precio descendente">Precio Descendente</option>
+                <select name="orderby">
+                    <option selected>Nombre Ascendente</option>
+                    <option >Nombre Descendente</option>
+                    <option >Precio Ascendente</option>
+                    <option >Precio Descendente</option>
                 </select>
-            </form>
             <% } else { %>
-            <form class="orderBy" action="/orderBy" method="POST">
-                <select name="orderby" onchange="this.form.submit()">
-                    <option data-search="<%= category[0].title %>" value="nombre ascendente">Nombre Ascendente
-                    </option>
-                    <option data-search="<%= category[0].title %>" value="nombre descendente">Nombre Descendente
-                    </option>
-                    <option data-search="<%= category[0].title %>" value="precio ascendente">Precio Ascendente
-                    </option>
-                    <option data-search="<%= category[0].title %>" value="precio descendente">Precio Descendente
-                    </option>
+                <select name="orderby">
+                    <option selected>Nombre Ascendente</option>
+                    <option >Nombre Descendente</option>
+                    <option >Precio Ascendente</option>
+                    <option >Precio Descendente</option>
                 </select>
-            </form>
             <% } %>
         </div>
         <div class="container_cards">
-            <% for(product of products) { %>
-            <div class="cards prod<%= product.id %>">
+            <% for(product of productsByName) { %>
+            <div class="cards byName prod<%= product.id %> ">
                 <i class="fas fa-cart-plus" data-id="<%= product.id %>"></i>
                 <a href="/products/<%= product.category_id %>/<%= product.id %>">
                     <div class="image">
@@ -75,6 +66,30 @@
                 </a>
             </div>
             <% } %>
+            <% for(product of productsByPrice) { %>
+                <div class="cards byPrice prod<%= product.id %>">
+                    <i class="fas fa-cart-plus" data-id="<%= product.id %>"></i>
+                    <a href="/products/<%= product.category_id %>/<%= product.id %>">
+                        <div class="image">
+                            <img class="item_image" src="/images/<%= product.image %>" alt="<%= product.name %>">
+                        </div>
+                        <div class="content">
+                            <div class="name">
+                                <p class="item_name"><%= product.name %></p>
+                            </div>
+                            <% if(product.discount > 0) { %>
+                            <div class="price">
+                                <p class="item_price">$ <%= product.price %><span><%= product.discount %>% OFF</span></p>
+                            </div>
+                            <% } else { %>
+                            <div class="price">
+                                <p class="item_price">$ <%= product.price %></p>
+                            </div>
+                            <% } %>
+                        </div>
+                    </a>
+                </div>
+                <% } %>
         </div>
     </div>
     <%- include("partials/footer") %>

@@ -33,6 +33,26 @@ window.onload = () => {
 
         }
     })
-    
 
+    const users = document.querySelectorAll(".messages_admin .user .userName");
+
+    users.forEach( user => {
+
+        user.onclick = () => {
+
+            const id = user.getAttribute("data-id")
+            const messages = document.querySelector(`.message.id${id}`)
+            const newMessage = document.querySelector(`.writeMessage.id${id}`)
+
+            if(messages.hasAttribute("style")){
+                messages.removeAttribute("style");
+                newMessage.removeAttribute("style");
+            } else {
+                messages.setAttribute("style", "display: flex;");
+                newMessage.setAttribute("style", "display: flex;");
+            }
+
+        }
+
+    })
 }

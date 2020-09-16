@@ -89,12 +89,48 @@ h2 {
     }
 
 /* -------------------------- Mensajes ----------------------------------*/
+.title {
+    padding-left: 40px;
+}
+
 .content_messages {
     width: 100%;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
     margin-bottom: 50px;
 }
+    .form_messages {
+        display: flex;
+        flex-direction: column;
+        margin: 40px 0;
+    }
+        .form_messages button {
+            width: 10%;
+            align-self: flex-end;
+        }
+        .form_messages textarea {
+            padding: 5px;
+            border: none;
+        }
+    .messagesOnDb {
+        width: 100%;
+    }
+        .oneMessage {
+            padding: 0 20px;
+        }
+            .oneMessage h5 {
+                background-color: rgb(119, 122, 118);
+                padding-left: 10px;
+            }
+            .oneMessage h5 span {
+                font-size: calc(var(--fontSize) - 0.5rem);
+                color: rgba(0, 0, 0, 0.5);
+            }
+            .oneMessage p {
+                background-color: rgb(153, 158, 152);
+                padding-left: 10px;
+            }
 
 @media( max-width: 980px){
     .price p {

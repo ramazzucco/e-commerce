@@ -6,7 +6,6 @@ var mercadoPago = require("../controllers/checkout");
 /* GET home page. */
 router.get('/', indexController.index);
 router.get("/search", indexController.search);
-router.post("/orderBy",indexController.orderBy);
 
 // GET Mercado Pago
 router.post('/generar_preferencia', mercadoPago.checkout);

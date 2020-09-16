@@ -4,14 +4,31 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER.UNSIGNED,
             allowNull: false
         },
+        to_id: {
+            type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: false
+        },
         content: {
             type: DataTypes.TEXT,
             allowNull: true
         },
         products_id: {
             type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: true
+        },
+        from_name: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        to_name: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        date: {
+            type: DataTypes.STRING,
             allowNull: false
         }
+
     }
 
     const config = {

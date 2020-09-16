@@ -35,16 +35,6 @@ const controllers = {
         const title = `${req.query.search}`;
 
         res.render("category", { products, category , categorys, title })
-    },
-    orderBy: async (req, res) => {
-        console.log(JSON.stringify(req.body.orderby))
-        // al objetoBusequeda hay que sacarle las comillas mediante algun metodo
-        const objetoBusequeda = JSON.stringify(req.body.orderby)
-
-        const nombreAscendente = await db.Product.findAll();
-        const nombreDescendente = await db.Product.findAll();
-        const precioAscendente = await db.Product.findAll();
-        const precioDescendente = await db.Product.findAll();
     }
 }
 module.exports = controllers;

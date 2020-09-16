@@ -71,6 +71,7 @@
 
         .sideBar {
             width: 20%;
+            height: 100vh;
         }
 
             .buttons {
@@ -97,7 +98,7 @@
 
         .main_admin {
             width: 80%;
-            /* height: 100vh; */
+            padding-top: 20px;
             background-color: white;
             border-left: 2px solid black;
         }
@@ -252,6 +253,81 @@
                         width: 30%;
                     }
 
+            /* ---------------------------- MENSAJES --------------------------*/
 
-
-
+            .items.messages_admin {
+                display: none;
+                flex-direction: column;
+            }
+                .items .user {
+                    padding: 5px 20px;
+                    background-color: var(--bgColorCuatro);
+                    margin: 2px 5px;
+                    border-radius: 25px;
+                }
+                    .messages_admin .user .userName {
+                        margin-bottom: 10px;
+                    }
+                    .messages_admin .user .message {
+                        display: none;
+                        flex-direction: column;
+                    }
+                        .singleMessage {
+                            border-radius: 25px;
+                            background-color: var(--bgColorDos);
+                            margin-bottom: 5px;
+                        }
+                        .date_message {
+                            width: 100%;
+                            text-align: center;
+                            font-size: calc(var(--fontSize) - 0.5rem);
+                            color: var(--bgColorUno);
+                        }
+                        .message_name {
+                            color: white;
+                            padding-left: 20px;
+                            background-color: rgba(0, 0, 0, 0.5);
+                            border-radius: 25px 25px 0 0;
+                        }
+                        .message_content {
+                            width: 100%;
+                            padding-left: 20px;
+                        }
+                            .singleMessage p a {
+                                padding-left: 20px;
+                                font-size: calc(var(--fontSize) - 0.5rem);
+                                color: var(--bgColorUno);
+                            }
+                            .singleMessage p a:hover {
+                                color: blue;
+                            }
+                        .message_name.ADMIN {
+                            color: white;
+                            text-align: end;
+                            padding-right: 20px;
+                        }
+                        .message_content.ADMIN {
+                            width: 100%;
+                            text-align: end;
+                            padding-right: 20px;
+                        }
+                    .writeMessage {
+                        display: none;
+                        flex-direction: column;
+                    }
+                        .writeMessage .form_messages {
+                            display: flex;
+                            flex-direction: column;
+                        }
+                            .form_messages label {
+                                font-size: calc(var(--fontSize) - 0.5rem);
+                                margin-left: 30px;
+                            }
+                            .form_messages button {
+                                width: 20%;
+                                align-self: center;
+                            }
+                            .writeMessage .form_messages textarea {
+                                border-radius: 25px;
+                                padding: 10px 10px;
+                            }

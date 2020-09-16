@@ -57,17 +57,36 @@
                 <div class="messagesOnDb">
                     <% for(message of messages) { %>
                     <div class="oneMessage">
+                        <h5><%= message.from_name %> <span><%= message.date %></span></h5>
                         <p><%= message.content %> </p>
                     </div>
-                    <% } %> 
+                    <% } %>
                 </div>
-                <form action="/products/messages" method="post">
+                <% if(user.status != 2) { %>
+                <form class="form_messages" action="/products/messages" method="post">
+                    <label for="">Escriba su mensaje aqui.</label>
                     <input type="number" name="category_id"  value="<%= product.category_id %>" style="display: none;">
                     <input type="number" name="users_id"  value="<%= user.id %>" style="display: none;">
+                    <input type="number" name="to_id"  value="1" style="display: none;">
                     <textarea name="content" cols="100" rows="10"></textarea>
                     <input type="number" name="products_id"  value="<%= product.id %>" style="display: none;">
+                    <input type="text" name="from_name"  value="<%= user.first_name %><%= user.last_name %> " style="display: none;">
+                    <input type="text" name="to_name"  value="ADMIN" style="display: none;">
                     <button type="submit" onclick="this.form.submit()">Enviar</button>
                 </form>
+            <% } else { %>
+                <form class="form_messages" action="/products/messages" method="post">
+                    <label for="">Escriba su mensaje aqui.</label>
+                    <input type="number" name="category_id"  value="<%= product.category_id %>" style="display: none;">
+                    <input type="number" name="users_id"  value="<%= user.id %>" style="display: none;">
+                    <input type="number" name="to_id"  value="1" style="display: none;">
+                    <textarea name="content" cols="100" rows="10"></textarea>
+                    <input type="number" name="products_id"  value="<%= product.id %>" style="display: none;">
+                    <input type="text" name="from_name"  value="ADMIN" style="display: none;">
+                    <input type="text" name="to_name"  value="<%= user.first_name %><%= user.last_name %>" style="display: none;">
+                    <button type="submit" onclick="this.form.submit()">Enviar</button>
+                </form>
+            <% } %> 
             </div>
         </div>
     </div>

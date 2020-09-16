@@ -45,4 +45,6 @@ router.get('/profile/:id', userRoute, usersController.profile);
 
 router.get('/admin/:id', userRoute, usersController.admin);
 
+router.post("/messages", usersController.messages);
+
 module.exports = router;

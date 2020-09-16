@@ -105,6 +105,49 @@ window.onload = () => {
         interval = setInterval(changeDiv, 6000);
         });
     });
+    //------------------------------ ORDER BY ---------------------------------//
+        const orderBy = document.querySelector(".ordenarPor select");
+        function show(x){
+           x.forEach(element => {
+                element.setAttribute("style","display: flex;")
+            })
+        }
+        function hide(x){
+            x.forEach(element => {
+                element.removeAttribute("style","display: flex;")
+            })
+         }
+
+        if(orderBy){
+            const byName =  document.querySelectorAll(".byName");
+            const byPrice = document.querySelectorAll(".byPrice");
+            const containerCards = document.querySelector(".container_cards");
+
+            show(byName);
+
+            orderBy.onchange = () => {
+
+                if(orderBy.value == "Nombre Ascendente"){
+                    show(byName);
+                    hide(byPrice);
+                    containerCards.removeAttribute("style");
+                } else if (orderBy.value == "Nombre Descendente"){
+                    show(byName);
+                    hide(byPrice);
+                    containerCards.setAttribute("style","flex-direction: row-reverse;");
+                } else if (orderBy.value == "Precio Ascendente"){
+                    show(byPrice);
+                    hide(byName);
+                    containerCards.removeAttribute("style");
+                } else if (orderBy.value == "Precio Descendente"){
+                    show(byPrice);
+                    hide(byName);
+                    containerCards.setAttribute("style","flex-direction: row-reverse;");
+                }
+
+            }
+            
+        }
 
     //------------   MODIFICAR LA CANTIDAD DE PRODUCTOS A COMPRAR EN EL CARRITO--------//
 
@@ -248,4 +291,5 @@ window.onload = () => {
         })
 
     }
+
 };

@@ -40,13 +40,21 @@ const controllers = {
         });
         const products = await db.Product.findAll({ include: "category" });
         const users = await db.User.findAll();
-        res.render("admin", { products, categorys, users, admin });
+        const messages = await db.Message.findAll({
+            where: {
+                users_id: users.map(user => { return user.id })
+            }
+        });
+        const userMessages = await db.User.findAll({
+            where: {
+                id: messages.map( message => { return message.users_id })
+            }
+        })
+        res.render("admin", { products, categorys, users, admin, messages });
     },
-
     login: (req, res) => {
         res.render("login");
     },
-
     processLogin: (req, res, next) => {
         let errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -114,8 +122,34 @@ const controllers = {
                     discount: products[i].discount
             })
         });
+        const users = await db.User.findAll();
+        const messages = await db.Message.findAll({
+            where: {
+                users_id: users.map(user => { return user.id })
+            }
+        });
         const categorys = await db.Category.findAll();
-        res.render('profile', { categorys, purchases });
+        res.render('profile', { categorys, purchases, users, messages });
+    },
+    messages: async (req, res) => {
+        var f=new Date();
+        const date = (f.getDate() + " / " + f.getMonth() + " / " + f.getFullYear() + "  -  " + f.getHours() + ":" + f.getMinutes() + ":" + f.getSeconds());
+        const message = {
+            users_id: req.body.users_id,
+            to_id: req.body.to_id,
+            content: req.body.content,
+            products_id: 0,
+            from_name: req.body.from_name,
+            to_name: req.body.to_name,
+            date: date
+        }
+        console.log(message)
+        db.Message.create(message);
+        if(req.body.users_id != 1){
+            res.redirect(`/users/profile/${req.body.users_id}`)
+        } else {
+            res.redirect(`/users/admin/${req.body.users_id}`)
+        }
     },
     logout: (req, res) => {
         req.session.user = null;

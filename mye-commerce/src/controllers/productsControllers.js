@@ -4,11 +4,6 @@ const path = require("path");
 
 
 const controllers = {
-    category: async (req, res) => {
-        const categorys = await db.Category.findAll();
-
-        res.render("category", { categorys });
-    },
     cart: async (req, res) => {
         console.log(req.body.id)
         if(req.body.id == undefined){
@@ -53,19 +48,29 @@ const controllers = {
                 return c;
             }
         });
-        const products = await db.Product.findAll({
+        const productsByName = await db.Product.findAll({
             where: {
                 category_id: idCategory
-            }
+            }, order: [ ["name"] ]
         });
-
-        res.render("category", { products, categorys, category })
+        const productsByPrice = await db.Product.findAll({
+            where: {
+                category_id: idCategory
+            }, order: [ ["price"] ]
+        });
+        res.render("category", { productsByName, productsByPrice,categorys, category })
     },
     messages: async (req, res) => {
+        var f=new Date();
+        const date = (f.getDate() + " / " + f.getMonth() + " / " + f.getFullYear() + "  -  " + f.getHours() + ":" + f.getMinutes() + ":" + f.getSeconds());
         const message = {
             users_id: req.body.users_id,
+            to_id: req.body.to_id,
             content: req.body.content,
-            products_id: req.body.products_id
+            products_id: req.body.products_id,
+            from_name: req.body.from_name,
+            to_name: req.body.to_name,
+            date: date
         }
         db.Message.create(message);
         res.redirect(`/products/${req.body.category_id}/${req.body.products_id}`)

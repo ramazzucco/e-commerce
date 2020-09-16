@@ -16,7 +16,7 @@
             <div class="navbar-icons">
                     <% if(user) { %>
                         <% if(user.status == 2) { %>
-                            <div class="icon_user"><a href="/users/admin/<%= user.id %>"><i class="material-icons icon-login">account_circle</i></a></div>
+                            <div class="icon_user"><a href="/users/admin/<%= user.id %>"><i class="material-icons icon-login" data-user="session">account_circle</i></a></div>
                     <% } else { %>
                         <div class="icon_logout"><a href="/users/logout">Logout</a></div>
                         <div class="icon_user"><a href="/users/profile/<%= user.id %> "><i class="material-icons icon-login" data-user="session">account_circle</i></a></div>

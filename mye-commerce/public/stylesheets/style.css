@@ -404,13 +404,14 @@ a, li {
       padding-left: 50px;
       margin-bottom: 30px;
     }
-    .cards {
+    .cards.byName,
+    .cards.byPrice {
       position: relative;
       background-color: white;
       max-width: 20%;
       min-width: 15%;
       margin: 2% 2%;
-      display: flex;
+      display: none;
       flex-wrap: wrap;
       justify-content: center;
       align-items: end;

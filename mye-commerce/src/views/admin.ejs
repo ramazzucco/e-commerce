@@ -36,6 +36,9 @@
                     <div class="sideBar_button" data-title="users">
                         <h4>Usuarios</h4>
                     </div>
+                    <div class="sideBar_button" data-title="messages_admin">
+                        <h4>Mensajes</h4>
+                    </div>
                 </div>
             </div>
             <div class="main_admin">
@@ -114,7 +117,48 @@
                             <p><%= user.city %></p>
                         </div>
                     </div>
-                <% } %> 
+                <% } %>
+                </div>
+                <div class="items messages_admin" data-items="messages_admin">
+                    <% for(user of users) { %>
+                    <% if(user.id != 1) { %> 
+                    <div class="user">
+                        <div class="userName" data-id="<%= user.id %>">
+                            <h5><%= user.first_name %> <%= user.last_name %><span></span></h6>
+                        </div>
+                        <div class="message id<%= user.id %>">
+                        <% const user_messages = messages.filter(m => { return m.users_id == user.id || m.from_name == "ADMIN" })%>
+                            <% for(message of user_messages) { %>
+                                <p class="date_message"><%= message.date %></p>
+                                <div class="singleMessage">
+                                    <p class="message_name <%= message.from_name %>"><%= message.from_name %></p>
+                                    <p class="message_content <%= message.from_name %>"><%= message.content %></p>
+                                    <% if(message.products_id > 0) { %>
+                                        <% const product = products.filter( p => { return p.id == message.products_id }) %>
+                                        <% for(id of product) { %>
+                                            <p class="link_product">
+                                                <a href="/products/<%= id.category_id %>/<%= message.products_id %>" target="_blank" rel="noopener noreferrer">Acerca de <%= id.name %> </a>
+                                            </p>
+                                        <% } %> 
+                                    <% } %> 
+                                </div>
+                        <% } %>
+                        </div>
+                        <div class="writeMessage id<%= user.id %>">
+                            <form class="form_messages" action="/users/messages" method="post">
+                                <label for="">Escriba su mensaje aqui.</label>
+                                <input type="number" name="users_id"  value="1" style="display: none;">
+                                <input type="number" name="to_id"  value="<%= user.id %>" style="display: none;">
+                                <textarea name="content" cols="100" rows="5"></textarea>
+                                <input type="number" name="products_id"  value="" style="display: none;">
+                                <input type="text" name="from_name"  value="ADMIN" style="display: none;">
+                                <input type="text" name="to_name"  value="<%= user.first_name %><%= user.last_name %>" style="display: none;">
+                                <button type="submit" onclick="this.form.submit()">Enviar</button>
+                            </form>
+                        </div>
+                    </div>
+                <% } else {}%>
+                <% } %>
                 </div>
             </div>
         </div>
