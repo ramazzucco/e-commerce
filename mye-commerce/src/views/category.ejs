@@ -18,8 +18,10 @@
                 <% } %>
             </div>
             <div class="paginado">
-                <p>1</p>
-                <p>2</p>
+                <% for(let i=1; i <= (totalProducts.length/2); i++) { %> 
+                <a href="/products/<%= productsByName[0].category_id %>?_page=<%= i %>"><%= i %></a>
+                <% } %>
+                <span class="material-icons arrow_left">arrow_left</span>
                 <span class="material-icons arrow_right">arrow_right</span>
             </div>
         </div>
@@ -43,7 +45,7 @@
         </div>
         <div class="container_cards">
             <% for(product of productsByName) { %>
-            <div class="cards byName prod<%= product.id %> ">
+            <div class="cards prod<%= product.id %> byName">
                 <i class="fas fa-cart-plus" data-id="<%= product.id %>"></i>
                 <a href="/products/<%= product.category_id %>/<%= product.id %>">
                     <div class="image">
@@ -67,7 +69,7 @@
             </div>
             <% } %>
             <% for(product of productsByPrice) { %>
-                <div class="cards byPrice prod<%= product.id %>">
+                <div class="cards prod<%= product.id %> byPrice">
                     <i class="fas fa-cart-plus" data-id="<%= product.id %>"></i>
                     <a href="/products/<%= product.category_id %>/<%= product.id %>">
                         <div class="image">

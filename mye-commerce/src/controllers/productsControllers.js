@@ -48,17 +48,22 @@ const controllers = {
                 return c;
             }
         });
+        const totalProducts = await db.Product.findAll({
+            where: {
+            category_id: idCategory
+            }
+        });
         const productsByName = await db.Product.findAll({
             where: {
                 category_id: idCategory
-            }, order: [ ["name"] ]
+            }, order: [ ["name"] ], limit: 2
         });
         const productsByPrice = await db.Product.findAll({
             where: {
                 category_id: idCategory
-            }, order: [ ["price"] ]
+            }, order: [ ["price"] ], limit: 2
         });
-        res.render("category", { productsByName, productsByPrice,categorys, category })
+        res.render("category", { productsByName, productsByPrice, totalProducts, categorys, category })
     },
     messages: async (req, res) => {
         var f=new Date();

@@ -38,7 +38,7 @@
                             <a href="#">Categorias</a>
                             <ul class="subMenu">
                                 <% for(category of categorys) { %> 
-                                <li><a href="/products/<%= category.id %>"><%= category.title %></a></li>
+                                <li><a href="/products/<%= category.id %>?_page=1"><%= category.title %></a></li>
                             <% } %>
                             </ul>
                         </li>
@@ -53,7 +53,7 @@
                     <a href="#">Categorias</a>
                     <ul class="subMenu">
                         <% for(category of categorys) { %> 
-                        <li><a href="/products/<%= category.id %>"><%= category.title %></a></li>
+                        <li><a href="/products/<%= category.id %>?_page=1"><%= category.title %></a></li>
                     <% } %> 
                     </ul>
                 </div>

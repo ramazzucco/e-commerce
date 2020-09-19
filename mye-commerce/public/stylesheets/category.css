@@ -1,3 +1,12 @@
+.active {
+    background-color: var(--bgColorCuatro);
+    font-size: calc(var(--fontSize) + 0.3rem);
+    padding: 0 5px;
+}
+.byName,
+.byPrice {
+    display: none;
+}
 .header_category {
     width: 90%;
     margin: 50px auto;
@@ -40,12 +49,18 @@
         margin-left: 30px;
     }
 
-        p {
+        .paginado a {
             margin: 0 5px;
         }
 
         .arrow_right {
             margin: 0 5px;
+            cursor: pointer;
+        }
+        .arrow_left {
+            margin: 0 5px;
+            cursor: pointer;
+            display: none;
         }
 
         h2 {

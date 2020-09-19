@@ -83,7 +83,7 @@ window.onload = () => {
         }
 
     }
-    
+
     //==========================================BODY _ BODY _ BODY=============================================//
 
     //-------------------------------- SLIDER AUTOMATICO Y MANUAL-------------------------------//
@@ -148,6 +148,67 @@ window.onload = () => {
             }
             
         }
+
+    //-----------------------------  PAGINADO -----------------------------------//
+
+    const pages = document.querySelectorAll(".paginado a");
+    const pagesSearch = document.querySelectorAll(".paginado a");
+    const search = location.href.slice(29,35);
+    const arrowLeft = document.querySelector(".arrow_left");
+    const arrowRight = document.querySelector(".arrow_right");
+
+    if(search == "search"){  // Si lagina es cargada por una busqueda en el search.
+        const numberPageSearch = Number(pagesSearch[0].getAttribute("href").slice(18));
+
+        pagesSearch.forEach( page => {
+            if(numberPageSearch == page.innerHTML){
+                page.classList.add("active")
+            }
+        });
+
+        if( numberPageSearch > 1 ){
+            arrowLeft.setAttribute("style","display: flex");
+        }
+        if(numberPageSearch == pagesSearch.length){
+            arrowRight.setAttribute("style","color: var(--bgColorUno);cursor: default;")
+        }
+
+    }
+
+    if(arrowRight){  // Cuando entra a una categoria.
+
+        const category = location.href.slice(31,32);
+        const numberPage = Number(location.href.slice(39));
+        console.log(location.href.slice(39))
+
+        pages.forEach( page => {
+            if(numberPage == page.innerHTML){
+                page.classList.add("active")
+            }
+        });
+
+        if( numberPage > 1 ){
+            arrowLeft.setAttribute("style","display: flex");
+        }
+        if(numberPage == pages.length){
+            arrowRight.setAttribute("style","color: var(--bgColorUno);cursor: default;")
+        }
+
+        arrowRight.onclick = () => {
+            if(numberPage != NaN){
+                if(numberPage == pages.length){
+                } else {
+                    location.href = `/products/${category}?_page=${numberPage + 1}`
+                }
+            } else {
+                const pagesSearch = document.querySelectorAll(".paginado a");
+            }
+
+        }
+        arrowLeft.onclick = () => {
+            location.href = `/products/${category}?_page=${numberPage - 1}`;
+        }
+    }
 
     //------------   MODIFICAR LA CANTIDAD DE PRODUCTOS A COMPRAR EN EL CARRITO--------//
 
@@ -236,8 +297,9 @@ window.onload = () => {
             location.reload(true);
 
         }
-        
+
     })
+
 
     //---------------------------------    PROFILE   ---------------------------------------------//
     const enableModify = document.querySelector(".eneable_modify");
@@ -291,5 +353,4 @@ window.onload = () => {
         })
 
     }
-
 };

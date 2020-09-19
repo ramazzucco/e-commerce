@@ -7,6 +7,7 @@ const guestRoute = require("../middlewares/guestRoute");
 const userRoute = require("../middlewares/userRoute");
 const adminRoute = require("../middlewares/adminRoute");
 const visitas = require("../middlewares/visitas");
+const pagination = require("../middlewares/pagination");
 const { check, validationResult, body } = require("express-validator");
 
 var storage = multer.diskStorage({
@@ -57,9 +58,9 @@ router.post("/cart", userRoute, productsController.cart);
 
 /* GET product page. */
 router.get('/:category/:id', visitas, productsController.detail);
-router.get('/:category', productsController.category);
+router.get('/:category', pagination, productsController.category);
 
 /* Messages */
-router.post("/messages", productsController.messages)
+router.post("/messages",userRoute, productsController.messages)
 
 module.exports = router;

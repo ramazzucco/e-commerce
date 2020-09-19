@@ -1,5 +1,4 @@
 window.onload = () => {
-    //=====================================       LOGIN       ==========================================//
 
     const formLogin = document.querySelector(".form-login");
     const email = document.getElementById("email");
@@ -64,7 +63,7 @@ window.onload = () => {
             if(password.value.trim().length < 7){
                 password.setAttribute("style",`${invalid}`);
                 document.querySelector(".password.invalid-feedback").setAttribute("style","display: flex;")
-                document.querySelector(".password.invalid-feedback").innerHTML = `<i class="fas fa-exclamation-circle"></i><p>Debe ingresar un mail válido</p>`
+                document.querySelector(".password.invalid-feedback").innerHTML = `<i class="fas fa-exclamation-circle"></i><p>Debe ingresar una contraseña válida</p>`
 
             } else {
                 password.removeAttribute("style");

@@ -1,6 +1,7 @@
 window.onload = () => {
     const formRegister = document.querySelector(".form-register");
     const invalid = "border-bottom: 2px solid darkred; color: darkred";
+    const onfocus = `content: ""; position: absolute; top: -15px; font-size: calc(var(--fontSize) - 0.5rem);`
 
     if(formRegister){
 
@@ -8,6 +9,8 @@ window.onload = () => {
         const last_name = document.getElementById("inputLastName");
         const email = document.getElementById("inputEmail");
         const password = document.getElementById("inputPassword");
+        const inputs = document.querySelectorAll(".form-register input");
+        const labels =  document.querySelectorAll(".form-register label");
 
         first_name.onkeydown = () => {
             if(first_name.value.trim() != ""){
@@ -33,6 +36,8 @@ window.onload = () => {
             if(email.value.trim() != ""){
                 email.removeAttribute("style");
             }
+            email.onblur = () => {
+            }
         }
         password.onkeydown = () => {
             if(password.value.trim() != ""){
@@ -44,7 +49,25 @@ window.onload = () => {
                 }
             }
         }
-    
+
+        for(let i=0; i < inputs.length; i++){
+            if(inputs[i].value == ""){
+                labels[i].removeAttribute("style")
+            } else {
+                labels[i].setAttribute("style",`${onfocus}`)
+            }
+            inputs[i].onfocus = () => {
+                labels[i].setAttribute("style",`${onfocus}`)
+            }
+            inputs[i].onblur = () => {
+               if(inputs[i].value == ""){
+                   labels[i].removeAttribute("style")
+                   labels[i].setAttribute("style","color: darkred;")
+                   inputs[i].setAttribute("style",`${invalid}`)
+               }
+            }
+        }
+
 
         formRegister.addEventListener("submit", (e) => {
 
