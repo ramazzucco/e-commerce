@@ -3,7 +3,7 @@
 Proyecto en progreso...
 El objetivo es crear un e-commerce que pueda aplicarse a una amplia gama de negocios.
 
--El proyecto esta basado en node y utilizo las siguientes tecnologias:
+-El proyecto esta basado en node y express y utilizo las siguientes tecnologias:
 
 * Front-End - HTML, CSS y Javascript.
 * Base de datos - MySQL.
