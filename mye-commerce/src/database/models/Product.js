@@ -21,12 +21,12 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false
         },
         stock: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.INTEGER.UNSIGNED,
             allowNull: true
         },
         discount: {
-            type: DataTypes.INTEGER,
-            allowNull: true
+            type: DataTypes.INTEGER.UNSIGNED,
+            allowNull: false
         }
     }
 

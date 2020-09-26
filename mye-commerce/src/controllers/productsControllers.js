@@ -10,21 +10,25 @@ const controllers = {
             res.redirect("/")
         } else {
             const categorys = await db.Category.findAll();
-            const products = await db.Product.findAll({
+            const productsDB = await db.Product.findAll({
                 where:{
                     id: req.body.id
                 }
             })
-            const priceWithDiscount = products.map(product => {
+            const products = productsDB.map( product => {
                 const discount = (product.price * product.discount) / 100;
-                return product.price - discount
+                const priceWithDiscount = product.price - discount
+                product.priceWithDiscount = priceWithDiscount;
+                return product;
             })
-            const totalPrice = priceWithDiscount.reduce((acum, price) => {
-                return acum + price
+            let totalPrice = parseFloat(0);
+            products.map( product => {
+                totalPrice += product.priceWithDiscount;
             })
-            res.render("cart", { products, categorys, priceWithDiscount, totalPrice })
+            res.render("cart", { products, categorys, totalPrice })
         }
     },
+
     detail: async (req, res) => {
         const id = req.params.id;
         const categorys = await db.Category.findAll();
@@ -40,6 +44,7 @@ const controllers = {
             res.render("detail",{ product, categorys, priceWithDiscount, messages });
         }
     },
+
     category: async (req, res) => {
         const idCategory = req.params.category;
         const categorys = await db.Category.findAll();
@@ -48,11 +53,13 @@ const controllers = {
                 return c;
             }
         });
-        const totalProducts = await db.Product.findAll({
+        const allProducts = await db.Product.findAll({
             where: {
-            category_id: idCategory
+                category_id: idCategory
             }
         });
+        const totalPages = allProducts.length %2 == 0 ? (allProducts.length / 2) : (allProducts.length / 2) + 1;
+        console.log("Total de productos de la categoria: ",totalPages,"Total de paginas: ",totalPages)
         const productsByName = await db.Product.findAll({
             where: {
                 category_id: idCategory
@@ -63,8 +70,9 @@ const controllers = {
                 category_id: idCategory
             }, order: [ ["price"] ], limit: 2
         });
-        res.render("category", { productsByName, productsByPrice, totalProducts, categorys, category })
+        res.render("category", { productsByName, productsByPrice, totalPages, categorys, category })
     },
+
     messages: async (req, res) => {
         var f=new Date();
         const date = (f.getDate() + " / " + f.getMonth() + " / " + f.getFullYear() + "  -  " + f.getHours() + ":" + f.getMinutes() + ":" + f.getSeconds());
@@ -80,6 +88,7 @@ const controllers = {
         db.Message.create(message);
         res.redirect(`/products/${req.body.category_id}/${req.body.products_id}`)
     },
+
     // Create - crear
     create: async (req, res) => {
         const products = await db.Product.findAll()
@@ -89,17 +98,27 @@ const controllers = {
 
     // Create -  guardar
     store: async (req, res) => {
-        console.log(req.file)
+        console.log("from create product: ",req.file.error)
 
-        let errors = req.file ? req.file.error : undefined;
-        const user = req.session.user
+        const errors = req.file ? req.file.error : undefined;
+        console.log("----------->",errors)
+        const user = req.session.user;
+
         if (errors != undefined) {
-            const products = await db.Product.findAll()
-            const categorys = await db.Category.findAll()
-            return res.render("productCreate", { errors, products, categorys })
+            // Selecciono todos los datos que necesita la pagina "admin".
+            const products = await db.Product.findAll({ include: "category" });
+            const categorys = await db.Category.findAll();
+            const users = await db.User.findAll();
+            const messages = await db.Message.findAll({ where: { users_id: users.map(user => { return user.id })}});
+            const orderSuccess = await db.Order.findAll({ where: { status: "success" }});
+            const profits = await db.Item.sum("price",{ where: { orders_id: orderSuccess.map(order => { return order.id})}});
+            const orderPending = await db.Order.findAll({ where: { status: "pending" }});
+            const pending = await db.Item.sum("price",{ where: { orders_id: orderPending.map(order => { return order.id})}});
+            const visit_page = req.cookies.visit_page;
+
+            return res.render("admin",{ products, categorys, users,  messages, visit_page, profits, pending, errors })
         } else {
             product = req.body;
-            console.log(product.category_id)
             product.category_id = req.body.category
             product.image = req.file ? req.file.filename : 'sin_imagen.jpg';
 
@@ -122,11 +141,12 @@ const controllers = {
     update: async (req, res) => {
         const user = req.session.user
         let errors = req.file ? req.file.error : undefined;
+        console.log("update product errors: ",errors)
 
         if (errors != undefined) {
             const product = await db.Product.findByPk(req.params.id);
             const categorys = await db.Category.findAll();
-            res.render("productEdit", { errors, product, categorys });
+            res.render("admin", { errors, product, categorys });
         } else {
             const product = await db.Product.findByPk(req.params.id)
             req.body.image = req.file ? req.file.filename : `${product.image}`;

@@ -2,9 +2,11 @@ var express = require('express');
 var router = express.Router();
 var indexController = require("../controllers/indexControllers");
 var mercadoPago = require("../controllers/checkout");
+const visit_page = require("../middlewares/visit_page");
+
 
 /* GET home page. */
-router.get('/', indexController.index);
+router.get('/',visit_page, indexController.index);
 router.get("/search", indexController.search);
 
 // GET Mercado Pago

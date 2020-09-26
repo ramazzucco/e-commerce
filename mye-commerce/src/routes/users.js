@@ -5,8 +5,6 @@ const guestRoute = require("../middlewares/guestRoute");
 const userRoute = require("../middlewares/userRoute");
 const multer = require('multer');
 const path = require('path');
-const bcrypt = require('bcrypt');
-const { check, validationResult, body } = require("express-validator");
 const validator = require("../validators/userValidator");
 
 
@@ -23,12 +21,12 @@ const upload = multer({
         if (file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/jpeg') {
             file.error = "type";
             req.file = file;
-
             return cb(null, false, new Error('Está mal el mimeType'));
         }
         if(file.mimetype === "undefined"){
           return cb(null, true);
         }
+        console.log(file)
         return cb(null, true);
     }
 });
@@ -39,6 +37,7 @@ router.post('/register', upload.single("avatar"), validator.register , usersCont
 
 router.get('/login', usersController.login);
 router.post('/login', validator.login , usersController.processLogin);
+router.put("/update", upload.single("avatar"), validator.register, usersController.update);
 router.get('/logout', usersController.logout);
 
 router.get('/profile/:id', userRoute, usersController.profile);

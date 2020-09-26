@@ -10,6 +10,7 @@
             <div class="title_admin">
                 <h2>Panel de control</h2>
             </div>
+            <div class="date"></div>
             <div class="search">
                 <input type="text" placeholder="Buscar productos">
                 <div class="icon-search"><i class="material-icons">search</i></div>
@@ -31,7 +32,7 @@
                         <h4>Productos</h4>
                     </div>
                     <div class="sideBar_button" data-title="new_products">
-                        <a href="/products/create/"><h4>Nuevo producto</h4></a>
+                        <h4>Nuevo producto</h4></a>
                     </div>
                     <div class="sideBar_button" data-title="users">
                         <h4>Usuarios</h4>
@@ -42,7 +43,29 @@
                 </div>
             </div>
             <div class="main_admin">
-                <div class="items products" data-items="products">
+                <div class="collapse_cards_admin">
+                    <span class="material-icons keyboard_arrow_down">keyboard_arrow_down</span>
+                </div>
+                <div class="items data_page">                                      <!---------- Tarjetas info -------->
+                    <div class="cards_admin">
+                        <div class="card_admin">
+                            <p>Total de Productos: <span><%= products.length %></span></p>
+                        </div>
+                        <div class="card_admin">
+                            <p>Total de Usuarios: <span><%= users.length %></span></p>
+                        </div>
+                        <div class="card_admin">
+                            <p class="profits">Ganancias: <span>$ <%= profits %></span></p>
+                        </div>
+                        <div class="card_admin">
+                            <p class="pending">Me deben: <span>$ <%= pending %></span></p>
+                        </div>
+                        <div class="card_admin">
+                            <p>Visitas: <span><%= visit_page %></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="items products" data-items="products">                       <!-------- Productos -------->
                     <div class="products_title">
                             <p class="id">Id</p>
                             <p class="category">Categoria</p>
@@ -54,21 +77,17 @@
                     <% for(product of products) { %> 
                     <div class="oneProduct">
                         <div class="id">
-                            <a href="/products/<%= product.category_id %>/<%= product.id %>"><p><%= product.id %></p></a>
-                            <div>
-                                <form class="form_delete_product" action="/products/delete/<%= product.id %>?_method=DELETE" method="POST">
-                                    <button class="button_form_delete" type="submit">Eliminar</button>
-                                </form>
-                            </div>
-                            <div>
-                                <a href="/products/edit/<%= product.id %>"><button class="button_modify" type="button">Modificar</button></a>
-                            </div>
+                            <p><%= product.id %></p>
+                            <form class="form_delete_product" action="/products/delete/<%= product.id %>?_method=DELETE" method="POST">
+                                <button class="button_form_delete" type="submit">Eliminar</button>
+                            </form>
+                            <a href="#form_edit"><button class="button_modify" data-itemsId="<%= product.id %>" type="button">Modificar</button></a>
                         </div>
                         <div class="category">
                             <p><%= product.category.title %></p>
                         </div>
                         <div class="name">
-                            <p><%= product.name %> </p>
+                            <a href="http://localhost:3000/products/<%= product.category.id %>/<%= product.id %> target="_blank" rel="noopener noreferrer"><p><%= product.name %> </p></a>
                         </div>
                         <div class="price">
                             <p>$ <%= product.price %> </p>
@@ -82,12 +101,80 @@
                     </div>
                 <% } %> 
                 </div>
-                <div class="items edit" data-items="edit">
-                    <form class="form_edit" action="/products/edit/" method="post" enctype="multipart/form-data">
-
-                    </form>
+                <div class="items edit_product" data-itemsId="<%= product.id %> "><!-------- Editar Productos -------->
+                    <% for(product of products) { %>
+                        <div class="form_header_edit edit<%= product.id %>">
+                            <div class="title">
+                                <h1><%= product.name %></h1>
+                            </div>
+                        </div>
+                        <form class="form_edit edit<%= product.id %>" id="form_edit" action="/products/edit/<%= product.id %>?_method=PUT" method="POST"
+                            enctype="multipart/form-data">
+                            <div class="category">
+                                <label for="inputCategory">Categoria</label>
+                                    <select name="category" id="inputCategory">
+                                        <% for(category of categorys) { %>
+                                        <% if(category.id == product.category_id) { %>
+                                        <option selected value="<%= category.id %>"><%= category.title %></option>
+                                        <% } else { %>
+                                        <option value="<%= category.id %>"><%= category.title %></option>
+                                        <% } %>
+                                        <% } %>
+                                    </select>
+                                <div class="errors">
+                                    <ul>
+                                        <% if(typeof errors != 'undefined') { %>
+                                        <% for(let i = 0; i < errors.length; i++) { %>
+                                        <li><%= errors[i].msg %> </li>
+                                        <% } %>
+                                        <% } %>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="name">
+                                <label for="inputName">Nombre del Producto</label>
+                                    <input type="text"  id="inputName" name="name" value="<%= product.name %>">
+                                    <div class="name invalid-feedback"></div>
+                            </div>
+                            <div class="price">
+                                <label for="inputPrice">Price</label>
+                                    <input type="number" id="inputPrice" name="price" value=<%= product.price %>>
+                                    <div class="price invalid-feedback"></div>
+                            </div>
+                            <div class="description">
+                                <label for="inputDescription">Descripcion</label>
+                                    <textarea type="text"  id="inputDescription" name="description"><%= product.description %></textarea>
+                                    <div class="description invalid-feedback"></div>
+                            </div>
+                            <div class="stock">
+                                <label for="inputStock">stock</label>
+                                    <input type="number" id="inputStock" name="stock" value=<%= product.stock %>>
+                                    <div class="stock invalid-feedback"></div>
+                            </div>
+                            <div class="discount">
+                                <label for="inputDiscount">discount</label>
+                                    <input type="number" id="inputDiscount" name="discount" value=<%= product.discount %> placeholder="Si el producto no tiene descuento coloque 0">
+                                    <div class="discount invalid-feedback"></div>
+                            </div>
+                            <div class="image">
+                                <label for="image">Imagen </label>
+                                <input id="image" type="file" name="image" value=<%= product.image %> placeholder="">
+                                <% if(typeof errors != 'undefined') { %>
+                                <div>
+                                    <p><%= errors.error %> </p>
+                                </div>
+                                <% } %>
+                            </div>
+                            <div class="button_form_edit">
+                                <button type="submit">Modificar</button>
+                            </div>
+                            <div class="button_back edit<%= product.id %>">
+                                <button type="button">&#60  Volver</button>
+                            </div>
+                        </form>
+                    <% } %>
                 </div>
-                <div class="items users" data-items="users">
+                <div class="items users" data-items="users">                              <!-------- Usuarios -------->
                     <div class="users_title">
                             <p class="id">Id</p>
                             <p class="first_name">Nombre</p>
@@ -119,22 +206,22 @@
                     </div>
                 <% } %>
                 </div>
-                <div class="items messages_admin" data-items="messages_admin">
+                <div class="items messages_admin" data-items="messages_admin">            <!-------- Mensajes -------->
                     <% for(user of users) { %>
-                    <% if(user.id != 1) { %> 
-                    <div class="user">
+                    <% if(user.id != 1 ) { %><!-- Muestra todos los mensajes de usuarios menos el ADMIN -->
+                    <div class="user id<%= user.id %>">
                         <div class="userName" data-id="<%= user.id %>">
                             <h5><%= user.first_name %> <%= user.last_name %><span></span></h6>
                         </div>
                         <div class="message id<%= user.id %>">
-                        <% const user_messages = messages.filter(m => { return m.users_id == user.id || m.from_name == "ADMIN" })%>
-                            <% for(message of user_messages) { %>
-                                <p class="date_message"><%= message.date %></p>
-                                <div class="singleMessage">
+                        <% const user_messages = messages.filter(m => { return m.users_id == user.id || ( m.from_name == "ADMIN" && m.to_id == user.id ) })%><!--Filtra los mensajes correspondientes a cada usuario-->
+                            <% for(message of user_messages) { %><!--Mensajes de cada usuario-->
+                                <p class="date_message <%= message.from_name %>"><%= message.date %></p>
+                                <div class="singleMessage <%= message.from_name %>">
                                     <p class="message_name <%= message.from_name %>"><%= message.from_name %></p>
                                     <p class="message_content <%= message.from_name %>"><%= message.content %></p>
                                     <% if(message.products_id > 0) { %>
-                                        <% const product = products.filter( p => { return p.id == message.products_id }) %>
+                                        <% const product = products.filter( p => { return p.id == message.products_id }) %><!--Si el id de producto es mayor a "0" el mensaje proviene de la pagina detalle del producto y muestra el link en el mensaje-->
                                         <% for(id of product) { %>
                                             <p class="link_product">
                                                 <a href="/products/<%= id.category_id %>/<%= message.products_id %>" target="_blank" rel="noopener noreferrer">Acerca de <%= id.name %> </a>
@@ -149,7 +236,7 @@
                                 <label for="">Escriba su mensaje aqui.</label>
                                 <input type="number" name="users_id"  value="1" style="display: none;">
                                 <input type="number" name="to_id"  value="<%= user.id %>" style="display: none;">
-                                <textarea name="content" cols="100" rows="5"></textarea>
+                                <textarea name="content" cols="100" rows="1"></textarea>
                                 <input type="number" name="products_id"  value="" style="display: none;">
                                 <input type="text" name="from_name"  value="ADMIN" style="display: none;">
                                 <input type="text" name="to_name"  value="<%= user.first_name %><%= user.last_name %>" style="display: none;">
@@ -160,9 +247,65 @@
                 <% } else {}%>
                 <% } %>
                 </div>
+                <div class="items new_products">                                    <!-------- Crear Producto -------->
+                    <div class="form_header">
+                        <div class="title">
+                            <h1>Nuevo producto</h1>
+                        </div>
+                    </div>
+                    <form class="form_create" action="/products/create/" method="POST" enctype="multipart/form-data">
+                        <div class="category">
+                            <label for="inputCategory">Categoria</label>
+                            <select name="category" id="inputCategory">
+                                <option selected disabled>Seleccione una categoria</option>
+                                <% for(category of categorys) { %>
+                                <option  value="<%= category.id %>"><%= category.title %></option>
+                                <% } %>
+                            </select>
+                            <div class="category invalid-feedback"></div>
+                        </div>
+                        <div class="name">
+                            <label for="inputName">Nombre del Producto</label>
+                                <input type="text"  id="inputName" name="name" value="">
+                                <div class="name invalid-feedback"></div>
+                        </div>
+                        <div class="price">
+                            <label for="inputPrice">Price</label>
+                                <input type="number" id="inputPrice" name="price" value="">
+                                <div class="price invalid-feedback"></div>
+                        </div>
+                        <div class="description">
+                            <label for="inputDescription">Descripcion</label>
+                                <textarea type="text"  id="inputDescription" name="description" value=""></textarea>
+                                <div class="description invalid-feedback"></div>
+                        </div>
+                        <div class="stock">
+                            <label for="inputStock">stock</label>
+                                <input type="number" id="inputStock" name="stock" value="">
+                                <div class="stock invalid-feedback"></div>
+                        </div>
+                        <div class="discount">
+                            <label for="inputDiscount">discount</label>
+                                <input type="number" id="inputDiscount" name="discount" value="" placeholder="Si el producto no tiene descuento ingrese 0">
+                                <div class="discount invalid-feedback"></div>
+                        </div>
+                        <div class="image">
+                            <label for="inputImage">Imagen </label>
+                            <input id="inputImage" type="file" name="image" value="" placeholder="">
+                            <% if(typeof errors != "undefined") { %>
+                            <div class="image invalid-feedback"><p><%= errors.error %></p></div>
+                            <% } %> 
+                        </div>
+                        <div class="button_form_create">
+                            <button type="submit">Crear</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
+    <script src="https://kit.fontawesome.com/1349bde661.js" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
     crossorigin="anonymous"></script>
     <script src="/javascripts/admin.js"></script>

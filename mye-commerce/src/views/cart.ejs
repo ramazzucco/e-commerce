@@ -17,7 +17,7 @@
                 </div>
                 <div class="products">
                     <% for(product of products) { %>
-                    <div class="singleProduct" data-id="<%= product.id %> ">
+                    <div class="singleProduct id<%= product.id %>" data-id="<%= product.id %>">
                         <div class="image_cart_page">
                             <img src="/images/<%= product.image %>" alt="">
                         </div>
@@ -28,7 +28,7 @@
                         </div>
                         <div class="quantity">
                             <label for="quantity">Cantidad: </label>
-                            <select name="quantity" id="quantity<%= product.id %> ">
+                            <select name="quantity" id="quantity<%= product.id %>">
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
@@ -42,15 +42,16 @@
                             </select>
                             <input type="number" name="id"  value="<%= product.id %>" style="display: none;">
                         </div>
+                        <div class="subTotals">
+                            <div class="delete">
+                                <p data-id=<%= product.id %>>Eliminar</p>
+                            </div>
+                            <div class="oneSubTotal">
+                                <p class="price id<%= product.id %>"> $ <span><%= product.priceWithDiscount.toFixed(2) %> </span> - </p>
+                            </div>
+                        </div>
                     </div>
                     <% } %>
-                </div>
-                <div class="subTotals">
-                        <% products.forEach((product,i) => { %>
-                        <div class="oneSubTotal">
-                            <p class="price id<%= product.id %>"> $ <span><%= priceWithDiscount[i] %></span> - </p>
-                        </div>
-                    <% }); %>
                 </div>
                 <div class="total_price">
                     <h3>Total: </h3><h3>$ <span><%= totalPrice.toFixed(2) %></span></h3>
