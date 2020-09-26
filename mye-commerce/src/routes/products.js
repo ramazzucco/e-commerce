@@ -8,7 +8,6 @@ const userRoute = require("../middlewares/userRoute");
 const adminRoute = require("../middlewares/adminRoute");
 const visitas = require("../middlewares/visitas");
 const pagination = require("../middlewares/pagination");
-const { check, validationResult, body } = require("express-validator");
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -24,7 +23,7 @@ const upload = multer({
     limits: { fileSize: 1024 * 1024 * 1024 },
     fileFilter(req, file, next) {
 
-      const isPhoto = file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/jpeg' && file.mimetype === undefined ? "" : file ;
+      const isPhoto = file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/jpeg' ? "" : file;
 
       console.log(file, "----------->",isPhoto)
 

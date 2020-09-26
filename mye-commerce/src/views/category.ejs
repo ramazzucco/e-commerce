@@ -18,7 +18,7 @@
                 <% } %>
             </div>
             <div class="paginado">
-                <% for(let i=1; i <= (totalProducts.length/2); i++) { %> 
+                <% for(let i=1; i <= totalPages; i++) { %> 
                 <a href="/products/<%= productsByName[0].category_id %>?_page=<%= i %>"><%= i %></a>
                 <% } %>
                 <span class="material-icons arrow_left">arrow_left</span>
@@ -29,14 +29,14 @@
             <label for="orderby">Ordenar por : </label>
             <% if(typeof title != "undefined") { %>
                 <select name="orderby">
-                    <option selected>Nombre Ascendente</option>
+                    <option >Nombre Ascendente</option>
                     <option >Nombre Descendente</option>
                     <option >Precio Ascendente</option>
                     <option >Precio Descendente</option>
                 </select>
             <% } else { %>
                 <select name="orderby">
-                    <option selected>Nombre Ascendente</option>
+                    <option >Nombre Ascendente</option>
                     <option >Nombre Descendente</option>
                     <option >Precio Ascendente</option>
                     <option >Precio Descendente</option>

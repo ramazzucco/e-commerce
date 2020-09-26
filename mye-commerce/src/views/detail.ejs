@@ -70,9 +70,9 @@
                     <input type="number" name="to_id"  value="1" style="display: none;">
                     <textarea name="content" cols="100" rows="10"></textarea>
                     <input type="number" name="products_id"  value="<%= product.id %>" style="display: none;">
-                    <input type="text" name="from_name"  value="<%= user.first_name %><%= user.last_name %> " style="display: none;">
+                    <input type="text" name="from_name"  value="<%= user.first_name %> <%= user.last_name %> " style="display: none;">
                     <input type="text" name="to_name"  value="ADMIN" style="display: none;">
-                    <button type="submit" onclick="this.form.submit()">Enviar</button>
+                    <div class="button"><button type="submit" onclick="this.form.submit()">Enviar</button></div>
                 </form>
             <% } else { %>
                 <form class="form_messages" action="/products/messages" method="post">
@@ -83,8 +83,8 @@
                     <textarea name="content" cols="100" rows="10"></textarea>
                     <input type="number" name="products_id"  value="<%= product.id %>" style="display: none;">
                     <input type="text" name="from_name"  value="ADMIN" style="display: none;">
-                    <input type="text" name="to_name"  value="<%= user.first_name %><%= user.last_name %>" style="display: none;">
-                    <button type="submit" onclick="this.form.submit()">Enviar</button>
+                    <input type="text" name="to_name"  value="<%= user.first_name %> <%= user.last_name %>" style="display: none;">
+                    <div class="button"><button type="submit" onclick="this.form.submit()">Enviar</button></div>
                 </form>
             <% } %> 
             </div>

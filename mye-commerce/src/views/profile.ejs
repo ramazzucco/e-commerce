@@ -8,12 +8,18 @@
     <link rel="stylesheet" href="/stylesheets/profile.css">
     <div class="container">
         <div class="sideBar_profile">
-            <div class="sideBar_button_collapse">
-                <i class="material-icons icon-menu">menu</i>
-            </div>
-            <div class="sidBar_buttons_profile">
+            <div class="sideBar_buttons_profile">
                 <div class="dateUser">
-                    <img src="/images/avatars/<%= user.avatar %>" alt="">
+                    <form class="form_update_avatar" action="/users/update?_method=PUT" method="POST" enctype="multipart/form-data">
+                        <input type="text" name="first_name" id="inputName" value="<%= user.first_name %>">
+                        <input type="text" name="last_name" id="inputLastName" value="<%= user.last_name %>">
+                        <input type="email" name="email" id="inputEmail" value="<%= user.email %> ">
+                        <input type="text" name="address" id="inputAddress" value="<%= user.address %>">
+                        <input type="text" name="city" id="inputCity" value="<%= user.city %> ">
+                        <input type="password" name="password" id="inputPassword" value="password">
+                        <input type="file" name="avatar" id="inputAvatar" value="" accept="image/jpg, image/png, image/jpeg" style="display: none;">
+                        <label for="inputAvatar"><img src="/images/avatars/<%= user.avatar %>" alt=""></label>
+                    </form>
                     <p>Hola!</p><h4><%= user.first_name %> </h4>
                 </div>
                 <div class="enabled_button myDates" data-id="myDates">
@@ -44,26 +50,70 @@
         </div>
         <div class="content_profile">
             <div class="content_myDates idmyDates">
-                <form class="form_update_profile" action="/users/?_method=PUT" method="post">
-                    <label for="first_name">Nombre</label>
-                    <input type="text" id="first_name" name="first_name" value="<%= user.first_name %>" disabled>
+                <form class="form_update_profile" action="/users/update?_method=PUT" method="post">
+                    <label for="inputName">Nombre</label>
+                    <input type="text" id="inputName" name="first_name" value="<%= user.first_name %>" disabled>
 
-                    <label for="last_name">Apellido</label>
-                    <input type="text" id="last_name" value="<%= user.last_name %>" disabled>
+                    <label for="inputLastName">Apellido</label>
+                    <input type="text" name="last_name" id="inputLastName" value="<%= user.last_name %>" disabled>
 
-                    <label for="email">Email</label>
-                    <input type="email" name="email" id="email" value="<%= user.email %> " disabled>
+                    <label for="inputEmail">Email</label>
+                    <input type="email" name="email" id="inputEmail" value="<%= user.email %> " disabled>
 
-                    <label for="address">Direccion</label>
-                    <input type="text" name="address" id="address" value="<%= user.address %>" disabled>
+                    <label for="inputAddress">Direccion</label>
+                    <input type="text" name="address" id="inputAddress" value="<%= user.address %>" disabled>
 
-                    <label for="city">Ciudad</label>
-                    <input type="text" name="city" id="city" value="<%= user.city %> " disabled>
+                    <label for="inputCity">Ciudad</label>
+                    <input type="text" name="city" id="inputCity" value="<%= user.city %> " disabled>
 
+                    <label class="labelPassword" for="inputPassword">Contraseña</label>
+                    <input type="password" name="password" id="inputPassword" value="" disabled>
+
+                    <input type="text" name="avatar" id="inputAvatar" value="<%= user.avatar %>" style="display: none;">
+
+                    <input style="display: none" type="text" name="status" value="0">
+
+                    <% if(typeof errors != "undefined") { %> 
+                        <% for(error of errors) { %>
+                            <% if(error.param == "first_name") { %>
+                            <div class="first_name invalid-feedback">
+                                <i class="fas fa-exclamation-circle"></i><p><%= error.msg %></p>
+                            </div>
+                            <% } %>
+                        <% } %> 
+                        <% for(error of errors) { %>
+                            <% if(error.param == "last_name") { %>
+                            <div class="last_name invalid-feedback">
+                                <i class="fas fa-exclamation-circle"></i><p><%= error.msg %></p>
+                            </div>
+                            <% } %>
+                        <% } %> 
+                            <% for(error of errors) { %>
+                                <% if(error.param == "email") { %>
+                                <div class="email invalid-feedback">
+                                    <i class="fas fa-exclamation-circle"></i><p><%= error.msg %></p>
+                                </div>
+                                <% } %>
+                        <% } %> 
+                        <% for(error of errors) { %>
+                            <% if(error.param == "password") { %>
+                            <div class="password invalid-feedback">
+                                <i class="fas fa-exclamation-circle"></i><p><%= error.msg %></p>
+                            </div>
+                            <% } %>
+                        <% } %>
+                        <% for(error of errors) { %>
+                            <% if(error.param == "avatar") { %>
+                            <div class="avatar invalid-feedback">
+                                <i class="fas fa-exclamation-circle"></i><p><%= error.msg %></p>
+                            </div>
+                            <% } %>
+                        <% } %>
+                    <% } %> 
                     <button type="button" class="eneable_modify">Modificar</button>
                     <div class="buttons_eneabled">
                         <button type="button" class="disable_modify">Cancelar</button>
-                        <button type="submit" class="modify_myDates">Enviar</button>
+                        <button type="submit" onclick="this.form.submit()" class="modify_myDates">Enviar</button>
                     </div>
                 </form>
             </div>
@@ -78,7 +128,7 @@
                             <p>$ <%= purchase.price %> </p>
                         </div>
                         <div class="watchDetail">
-                            <p class="enabled_button verDetalles" data-id="<%= purchase.id %> ">Ver Detelles</p>
+                            <p class="verDetalles" data-id="<%= purchase.id %> ">Ver Detelles</p>
                         </div>
                     </div>
                     <div class="purchaseDetail id<%= purchase.id %> ">
@@ -99,18 +149,16 @@
                 </div>
             </div>
             <div class="content_messages idmessages">
-                <!-- <div class="items messages_user"> -->
+                <div class="messages_profile">
                     <% for(u of users) { %>
                     <% if(u.id == user.id) { %> 
                     <div class="user">
-                        <div class="userName" data-id="<%= u.id %>">
-                            <h5><%= u.first_name %> <%= u.last_name %><span></span></h6>
-                        </div>
                         <div class="message id<%= u.id %>">
-                        <% const user_messages = messages.filter(m => { return m.users_id == u.id || m.from_name == "ADMIN" && m.to_id == u.id})%>
+                            <h1 class="noMessages">No hay mensajes.</h1>
+                            <% const user_messages = messages.filter(m => { return m.users_id == u.id || m.from_name == "ADMIN" && m.to_id == u.id})%>
                             <% for(message of user_messages) { %>
-                                <p class="date_message"><%= message.date %></p>
-                                <div class="singleMessage">
+                                <p class="date_message <%= message.from_name %>"><%= message.date %></p>
+                                <div class="singleMessage <%= message.from_name %>">
                                     <p class="message_name <%= message.from_name %>"><%= message.from_name %></p>
                                     <p class="message_content <%= message.from_name %>"><%= message.content %></p>
                                 </div>
@@ -131,7 +179,7 @@
                     </div>
                 <% } else {}%>
                 <% } %>
-                <!-- </div> -->
+                </div>
             </div>
         </div>
     </div>

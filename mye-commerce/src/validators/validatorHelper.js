@@ -25,7 +25,7 @@ module.exports = function (errors) {
                 return this.errors[field].value;
             } else {
                 return null
-            }        
+            }
         }
     }
 }

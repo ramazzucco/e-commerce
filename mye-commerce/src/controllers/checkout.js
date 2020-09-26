@@ -18,12 +18,15 @@ const controller = {
         const products = databaseProducts.map((element, i) => {
             const priceWithDiscount = (Number(element.price) - ((Number(element.price) * element.discount) / 100));
             return {
+                id: element.id,
                 name: element.name,
                 quantity: Number(productQuantity[i]),
                 price: priceWithDiscount,
+                discount: element.discount,
+                priceWithoutDiscount: element.price,
+                image: element.image
             }
         });
-
         //   Creo la orden.
         var f=new Date();
         const date = (f.getDate() + " / " + f.getMonth() + " / " + f.getFullYear() + "  -  " + f.getHours() + ":" + f.getMinutes() + ":" + f.getSeconds());
@@ -37,23 +40,26 @@ const controller = {
             order: [["id", "DESC"]],
         });
         const orderId = lastOrderId.id + 1;
+        // Creo los items por cada producto.
+        products.forEach((element,i) => {
+            const price = element.price * element.quantity
+            db.Item.create({
+                products_id: element.id,
+                orders_id: orderId,
+                price: price,
+                quantity: element.quantity,
+                name: element.name,
+                discount: element.discount,
+                priceWithoutDiscount: element.price,
+                image: element.image
+            });
+        });
         db.Order.create({
             items_id: itemId,
             users_id: req.session.user.id,
             number: orderId,
             status:"pending",
             date: date
-        });
-
-        // Creo los items por cada producto.
-        products.forEach((element,i) => {
-            db.Item.create({
-                products_id: id[i],
-                orders_id: orderId,
-                price: element.price,
-                quantity: element.quantity,
-                name: element.name,
-            });
         });
 
         const generateMercadoPagoItemFromProduct = (product) => {
@@ -75,8 +81,21 @@ const controller = {
         );
         return res.redirect(mercadoPagoPreferency.response.init_point);
     },
-    successPayment: (req, res) => {
-        res.redirect(`/users/profile/${req.session.user.id}`);
+    successPayment: async (req, res) => {
+        const lastOrderId = await db.Order.findOne({
+            limit: 1,
+            order: [["id", "DESC"]],
+        });
+        console.log(req.query)
+        lastOrderId.status = "success";
+
+        db.Order.update(lastOrderId. dataValues,{
+            where: {
+                id: lastOrderId.id
+            }
+        })
+        .then(() => res.redirect(`/users/profile/${req.session.user.id}`));
+
     },
     failedPayment: (req, res) => {
         res.redirect(`/product/cart`);

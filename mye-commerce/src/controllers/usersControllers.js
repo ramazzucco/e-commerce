@@ -5,9 +5,11 @@ const { Op } = db.Sequelize;
 
 
 const controllers = {
+
     register: (req, res) => {
         res.render("register");
     },
+
     store: (req, res, next) => {
         let errorsValidator = validationResult(req);
         let errors = errorsValidator.errors.filter( error => { return error.value != undefined })
@@ -33,6 +35,7 @@ const controllers = {
             });
         }
     },
+
     admin: async (req, res) => {
         const admin = req.session.user;
         const categorys = await db.Category.findAll({
@@ -45,16 +48,35 @@ const controllers = {
                 users_id: users.map(user => { return user.id })
             }
         });
-        const userMessages = await db.User.findAll({
+        const orderSuccess = await db.Order.findAll({
             where: {
-                id: messages.map( message => { return message.users_id })
+                status: "success"
             }
-        })
-        res.render("admin", { products, categorys, users, admin, messages });
+        });
+        const profits = await db.Item.sum("price",{
+            where: {
+                orders_id: orderSuccess.map(order => { return order.id})
+            }
+        });
+        const orderPending = await db.Order.findAll({
+            where: {
+                status: "pending"
+            }
+        });
+        const pending = await db.Item.sum("price",{
+            where: {
+                orders_id: orderPending.map(order => { return order.id})
+            }
+        });
+        const visit_page = req.cookies.visit_page;
+
+        res.render("admin", { products, categorys, users, admin, messages, visit_page, profits, pending });
     },
+
     login: (req, res) => {
         res.render("login");
     },
+
     processLogin: (req, res, next) => {
         let errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -90,25 +112,16 @@ const controllers = {
             });
         }
     },
-    profile: async (req, res) => {
-        const orders = await db.Order.findAll({
-            where:{
-                users_id: req.session.user.id
-            }
-        });
+
+    update: async (req, res) => {
+        let errorsValidator = validationResult(req);
+        const user = req.session.user;
+        let errors = errorsValidator.errors.filter( error => { return error.value != user.avatar });
+        const orders = await db.Order.findAll({ where:{ users_id: req.session.user.id }});
         const ordersId = orders.map( order => { return order.id });
-        const items = await db.Item.findAll({
-            where: {
-                orders_id: ordersId
-            },
-            order: ["products_id"]
-        });
+        const items = await db.Item.findAll({ where: { orders_id: ordersId }, order: ["products_id"]});
         const productsId = items.map( item => { return item.products_id });
-        const products = await db.Product.findAll({
-            where: {
-                id: productsId
-            }
-        });
+        const products = await db.Product.findAll({ where: { id: productsId }});
         const purchases = [];
         items.forEach( (item,i) => {
             purchases.push({
@@ -123,6 +136,75 @@ const controllers = {
             })
         });
         const users = await db.User.findAll();
+        const messages = await db.Message.findAll({ where: { users_id: users.map(user => { return user.id })}});
+        const categorys = await db.Category.findAll();
+
+        if (errors.length) {
+
+            res.render('profile', { categorys, purchases, users, messages, errors });
+
+        } else {
+
+            if(req.body.avatar == user.avatar){
+                if (bcrypt.compareSync(req.body.password, user.password)){
+
+                    req.body.password = user.password;
+                    req.body.status = user.status;
+                    req.body.id = user.id;
+                    req.session.user = req.body;
+
+                    db.User.update(req.body, {
+                        where: { id: user.id }
+                    })
+                    .then(() =>  res.redirect(`/users/profile/${user.id}`));
+                } else {
+                    const errors = [{ param: "password",msg: "Contraseña Incorrecta" }];
+                    res.render('profile', { categorys, purchases, users, messages, errors });
+                }
+            } else {
+                req.body.password = user.password;
+                req.body.avatar = req.file.filename;
+                req.body.id = user.id;
+                req.session.user = req.body;
+
+                db.User.update(req.body, {
+                    where: { id: user.id }
+                })
+                .then(() =>  res.redirect(`/users/profile/${user.id}`));
+            }
+        }
+        console.log(req.body, "--->", errors)
+    },
+
+    profile: async (req, res) => {
+
+        const orders = await db.Order.findAll({
+            attributes: [ "number" ],
+            where:{
+                users_id: req.session.user.id
+            }
+        });
+        const items = await db.Item.findAll({
+            where: {
+                orders_id: orders.map( order => { return order.number })
+            },
+            order: ["products_id"]
+        });
+        const purchases = [];
+        items.forEach( item => {
+            purchases.push({
+                id: item.id,
+                order: item.orders_id,
+                name: item.name,
+                price: item.price,
+                priceWithoutDiscount: item.priceWithoutDiscount,
+                quantity: item.quantity,
+                discount: item.discount,
+                image: item.image
+            });
+        })
+        // console.log("--------------------->",purchases)
+        const users = await db.User.findAll();
         const messages = await db.Message.findAll({
             where: {
                 users_id: users.map(user => { return user.id })
@@ -131,6 +213,7 @@ const controllers = {
         const categorys = await db.Category.findAll();
         res.render('profile', { categorys, purchases, users, messages });
     },
+
     messages: async (req, res) => {
         var f=new Date();
         const date = (f.getDate() + " / " + f.getMonth() + " / " + f.getFullYear() + "  -  " + f.getHours() + ":" + f.getMinutes() + ":" + f.getSeconds());
@@ -151,10 +234,13 @@ const controllers = {
             res.redirect(`/users/admin/${req.body.users_id}`)
         }
     },
+
     logout: (req, res) => {
         req.session.user = null;
+        req.session.cart = null;
         res.clearCookie("user");
         res.redirect("/");
     },
+
 }
 module.exports = controllers;
