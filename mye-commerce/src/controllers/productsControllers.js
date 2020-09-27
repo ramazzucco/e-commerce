@@ -89,6 +89,13 @@ const controllers = {
         res.redirect(`/products/${req.body.category_id}/${req.body.products_id}`)
     },
 
+    offers: (req, res) => {
+        const user = req.session.user;
+        req.body.products_id = Number(req.body.products_id);
+        db.Promotion.create(req.body)
+        .then(() => res.redirect(`/users/admin/${user.id}`))
+    },
+
     // Create - crear
     create: async (req, res) => {
         const products = await db.Product.findAll()

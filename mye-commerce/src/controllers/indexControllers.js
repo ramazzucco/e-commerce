@@ -17,7 +17,8 @@ const controllers = {
             }
         });
         const categorys = await db.Category.findAll();
-        res.render("index", { categorys, products, masVisitados })
+        const promotions = await db.Promotion.findAll();
+        res.render("index", { categorys, products, masVisitados, promotions })
     },
     search: async (req, res) => {
         const productsByName = await db.Product.findAll({
