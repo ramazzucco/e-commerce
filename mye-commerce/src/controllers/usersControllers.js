@@ -68,9 +68,10 @@ const controllers = {
                 orders_id: orderPending.map(order => { return order.id})
             }
         });
+        const promotions = await db.Promotion.findAll();
         const visit_page = req.cookies.visit_page;
 
-        res.render("admin", { products, categorys, users, admin, messages, visit_page, profits, pending });
+        res.render("admin", { products, categorys, users, admin, messages, visit_page, profits, pending, promotions });
     },
 
     login: (req, res) => {

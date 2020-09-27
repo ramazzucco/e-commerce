@@ -104,12 +104,14 @@ window.onload = () => {
 
     users.forEach( user => {
 
-        const id = user.getAttribute("data-id")
+        const id = user.getAttribute("data-id");
 
         user.onclick = () => {
 
+            const idUserClick = user.getAttribute("data-id");
             const messages = document.querySelector(`.message.id${id}`)
             const newMessage = document.querySelector(`.writeMessage.id${id}`)
+
 
             if(messages.hasAttribute("style")){
                 messages.removeAttribute("style");
@@ -119,7 +121,20 @@ window.onload = () => {
                 newMessage.setAttribute("style", "display: flex;");
             }
 
+            users.forEach(user => {
+
+                if(user.className != `userName id${idUserClick}`){
+                    if(user.hasAttribute("style")){
+                        user.removeAttribute("style");
+                    } else {
+                        user.setAttribute("style","display: none;");
+                    }
+                }
+
+            })
+
         }
+
         // Muestra solo los usuario que tienen mensajes.
         const messages_content = document.querySelector(`.message.id${id} .message_content`);
 
@@ -310,5 +325,18 @@ window.onload = () => {
             }
         }
     })
+    // Crear oferta
+    const createOfferButton = document.querySelector(".create_offer");
 
+    createOfferButton.onclick = () => {
+
+        const form_create_promotion = document.querySelector(".form_create_promotion");
+
+        if(form_create_promotion.hasAttribute("style")){
+            form_create_promotion.removeAttribute("style");
+        } else {
+            form_create_promotion.setAttribute("style","display: flex;");
+        }
+
+    }
 }

@@ -60,6 +60,9 @@ router.get('/:category/:id', visitas, productsController.detail);
 router.get('/:category', pagination, productsController.category);
 
 /* Messages */
-router.post("/messages",userRoute, productsController.messages)
+router.post("/messages",userRoute, productsController.messages);
+
+/* Offers */
+router.post("/offers", productsController.offers);
 
 module.exports = router;

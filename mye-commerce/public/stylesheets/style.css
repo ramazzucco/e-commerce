@@ -352,7 +352,7 @@ li {
 /* Texto que acompaña a cada imagen */
 #slider p {
     position: absolute;
-    bottom: 5%;
+    bottom: 15%;
     left: 0;
     display: block;
     overflow: hidden;
@@ -541,6 +541,7 @@ span {
 }
 #whatsapp_message button:hover {
     background-color:#128C7E;
+    cursor: pointer;
 }
 .redes_sociales {
     width: 100%;

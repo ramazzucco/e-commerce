@@ -40,6 +40,9 @@
                     <div class="sideBar_button" data-title="messages_admin">
                         <h4>Mensajes</h4>
                     </div>
+                    <div class="sideBar_button" data-title="promotions">
+                        <h4>Ofertas</h4>
+                    </div>
                 </div>
             </div>
             <div class="main_admin">
@@ -210,8 +213,8 @@
                     <% for(user of users) { %>
                     <% if(user.id != 1 ) { %><!-- Muestra todos los mensajes de usuarios menos el ADMIN -->
                     <div class="user id<%= user.id %>">
-                        <div class="userName" data-id="<%= user.id %>">
-                            <h5><%= user.first_name %> <%= user.last_name %><span></span></h6>
+                        <div class="userName id<%= user.id %>" data-id="<%= user.id %>">
+                            <h5><span><%= user.first_name %> <%= user.last_name %></span></h6>
                         </div>
                         <div class="message id<%= user.id %>">
                         <% const user_messages = messages.filter(m => { return m.users_id == user.id || ( m.from_name == "ADMIN" && m.to_id == user.id ) })%><!--Filtra los mensajes correspondientes a cada usuario-->
@@ -300,6 +303,34 @@
                             <button type="submit">Crear</button>
                         </div>
                     </form>
+                </div>
+                <div class="items promotions" data-items="promotions">
+                    <div class="offers">
+                        <h3 class="title_offers">Ofertas</h3>
+                        <div class="allOffers">
+                            <% if(typeof promotions != "undefined") { %>
+                                <% for(promotion of promotions) { %>
+                                    <div class="singleOffer">
+                                        <% const product = products.filter(p => { return p.id == promotion.products_id }) %>
+                                        <p class="product_name"><%= product.map(p => { return p.name }) %></p>
+                                        <p class="offer_description"><%= promotion.description %> </p>
+                                    </div>
+                                <% } %>
+                            <%} %>
+                        </div>
+                        <button class="create_offer">Nueva oferta</button>
+                        <form class="form_create_promotion" action="/products/offers" method="post">
+                            <select name="products_id" id="">
+                                <option disabled selected>Seleccione un producto</option>
+                                <% for(product of products) { %>
+                                <option value="<%= product.id %>"><%= product.name %></option>
+                                <% } %>
+                            </select>
+                            <label for="description">Descripción</label>
+                            <textarea name="description" id="" cols="30" rows="10"></textarea>
+                            <button class="send_offer">Crear</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
