@@ -114,9 +114,13 @@ window.onload = () => {
 
 
             if(messages.hasAttribute("style")){
+                user.querySelector("h5 span").removeAttribute("style");
+                user.querySelector("h5 ").removeAttribute("style");
                 messages.removeAttribute("style");
                 newMessage.removeAttribute("style");
             } else {
+                user.querySelector("h5").setAttribute("style","background-color: var(--bgColorCuatro);transition: all .6s linear");
+                user.querySelector("h5 span").setAttribute("style","background-color: transparent; transition: all .6s linear");
                 messages.setAttribute("style", "display: flex;");
                 newMessage.setAttribute("style", "display: flex;");
             }

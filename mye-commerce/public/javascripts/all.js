@@ -104,7 +104,28 @@ window.onload = () => {
                     cartIcon.classList.remove("loginOn");
                 }
             }
-        };
+
+            // Para eliminar items del carrito modal.
+            const close = document.querySelectorAll(".close span");
+            close.forEach(element => {
+
+                element.onclick = () => {
+
+                    const itemID = element.getAttribute("data-id");
+                    document.querySelector(`.row.${itemID}`).setAttribute("style","display: none");
+
+                    const itemsId = document.querySelectorAll(".form_cart input");
+                    itemsId.forEach(id => {
+                        if(`id${id.value}` == itemID){
+                            id.setAttribute("disabled","");
+                        }
+                    })
+
+                }
+
+            })
+
+        }
 
     }
 
@@ -295,6 +316,7 @@ window.onload = () => {
     //---------------------------------- AGREGAR AL CARRITO MODAL ----------------------------------------//
 
     const iconAdd = document.querySelectorAll(".fa-cart-plus");
+
     // Para que agregue los items al carrito cuando cambia de pagina.
     if (sessionStorage.cart) {
         document.querySelector(
@@ -310,6 +332,7 @@ window.onload = () => {
     // Crea la sessionStorage y agrega los items al carrito modal.
     iconAdd.forEach((element) => {
         element.onclick = () => {
+
             const id = element.getAttribute("data-id");
             const image = document.querySelector(`.prod${id} .item_image`);
             const name = document.querySelector(`.prod${id} .item_name`);
@@ -317,7 +340,7 @@ window.onload = () => {
 
             if (!sessionStorage.cart) {
                 items.push(
-                    `<div class="row"><div class="image_cart"><img src="${image.src}" alt=""></div><div class="content_cart"><h3>${name.innerHTML}</h3><p>${price.innerHTML}</p></div></div>`
+                    `<div class="row id${id}"><div class="image_cart"><img src="${image.src}" alt=""></div><div class="content_cart"><p class="close"><span data-id="id${id}">X</span></p><h3>${name.innerHTML}</h3><p>${price.innerHTML}</p></div></div>`
                 );
                 itemsId.push(
                     `<input name="id" style="display: none;" value="${id}">`
@@ -330,15 +353,14 @@ window.onload = () => {
                 const sessionItems = sessionStorage.getItem("cart");
                 const sessionItemsId = sessionStorage.getItem("itemsId");
                 items.push(
-                    `<div class="row"><div class="image_cart"><img src="${image.src}" alt=""></div><div class="content_cart"><h3>${name.innerHTML}</h3><p>${price.innerHTML}</p></div></div>`,
+                    `<div class="row id${id}"><div class="image_cart"><img src="${image.src}" alt=""></div><div class="content_cart"><p class="close"><span data-id="id${id}">X</span></p><h3>${name.innerHTML}</h3><p>${price.innerHTML}</p></div></div>`,
                     sessionItems
                 );
                 itemsId.push(
                     `<input name="id" style="display: none;" value="${id}">`,
                     sessionItemsId
                 );
-                // items.push(sessionItems);
-                // itemsId.push(sessionItemsId);
+
                 sessionStorage.setItem("cart", `${items}`);
                 sessionStorage.setItem("itemsId", `${itemsId}`);
             }
@@ -347,11 +369,21 @@ window.onload = () => {
             document.querySelector(".form_cart").innerHTML += itemsId.join("");
         };
 
+        // Vaciar carrito cuando va a Mis Compras (Pagina Carrito).
+        const misCompras = document.querySelector(".mis_compras");
+        misCompras.onclick = () => {
+
+            sessionStorage.clear("cart");
+            sessionStorage.clear("itemsId");
+
+        }
+
+        // Vaciar carrito.
         const clearCart = document.querySelector(".clear_cart");
         clearCart.onclick = () => {
             sessionStorage.clear("cart");
             sessionStorage.clear("itemsId");
-            sessionStorage.clear("cantItems");
+            // sessionStorage.clear("cantItems");
             document.querySelector(
                 ".oneProduct"
             ).innerHTML = sessionStorage.getItem("cart");
@@ -359,6 +391,8 @@ window.onload = () => {
             location.reload(true);
         };
     });
+
+    
 
     //---------------------------------    PROFILE   ---------------------------------------------//
 
