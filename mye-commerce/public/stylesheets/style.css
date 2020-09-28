@@ -265,7 +265,8 @@ li {
 }
 .form_cart button:hover,
 .clear_cart:hover {
-    color: blue;
+    cursor: pointer;
+    color: darkgray;
 }
 .container_cart h4 {
     text-align: center;
@@ -274,7 +275,8 @@ li {
     width: 100%;
 }
 .container_cart a:hover {
-    color: blue;
+    cursor: pointer;
+    color: grey;
 }
 
 .oneProduct {
@@ -297,6 +299,16 @@ li {
     justify-content: center;
     color: white;
     padding-left: 20px;
+}
+.close span {
+    margin-left: 95%;
+}
+.close span:hover {
+    color: darkgray;
+    cursor: pointer;
+}
+.content_cart p {
+    margin-bottom: auto;
 }
 .cantProduct {
     position: fixed;
