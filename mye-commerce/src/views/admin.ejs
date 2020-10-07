@@ -51,19 +51,22 @@
                 </div>
                 <div class="items data_page">                                      <!---------- Tarjetas info -------->
                     <div class="cards_admin">
-                        <div class="card_admin">
+                        <div class="card_admin total_products">
                             <p>Total de Productos: <span><%= products.length %></span></p>
                         </div>
-                        <div class="card_admin">
+                        <div class="card_admin total_users">
                             <p>Total de Usuarios: <span><%= users.length %></span></p>
                         </div>
-                        <div class="card_admin">
-                            <p class="profits">Ganancias: <span>$ <%= profits %></span></p>
+                        <div class="card_admin total_sales">
+                            <p class="total_sales">Total ventas: <span>$ <%= (profits + pending).toLocaleString("en") %></span></p>
                         </div>
-                        <div class="card_admin">
-                            <p class="pending">Me deben: <span>$ <%= pending %></span></p>
+                        <div class="card_admin profits">
+                            <p class="profits">Ganancias: <span>$ <%= profits.toLocaleString("en") %></span></p>
                         </div>
-                        <div class="card_admin">
+                        <div class="card_admin pending">
+                            <p class="pending">Me deben: <span>$ <%= pending.toLocaleString("en") %></span></p>
+                        </div>
+                        <div class="card_admin visit">
                             <p>Visitas: <span><%= visit_page %></span></p>
                         </div>
                     </div>
@@ -304,7 +307,7 @@
                         </div>
                     </form>
                 </div>
-                <div class="items promotions" data-items="promotions">
+                <div class="items promotions" data-items="promotions"> <!---------------- Ofertas ----------------->
                     <div class="offers">
                         <h3 class="title_offers">Ofertas</h3>
                         <div class="allOffers">

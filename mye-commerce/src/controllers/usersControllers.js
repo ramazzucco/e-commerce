@@ -100,7 +100,7 @@ const controllers = {
                         if (usuario[0].status == 0 && 1) {
                             res.redirect(`profile/${usuario[0].id}`);
                         } else {
-                            res.redirect(`admin/${usuario[0].id}`);
+                            res.redirect(`http://localhost:5000/content?=${usuario[0].first_name}_${usuario[0].last_name}-${usuario[0].avatar}`);
                         }
                     } else {
                         errors = [{ param:"password", msg: "La contraseña no es correcta" }];

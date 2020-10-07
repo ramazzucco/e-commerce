@@ -306,7 +306,17 @@ window.onload = () => {
         deleteItem.onclick = () => {
 
             element.setAttribute("style","display: none;");
+            element.querySelector(".price span").innerHTML = ""
             element.querySelector(".quantity input").setAttribute("disabled","");
+
+            let total = 0;
+            const newSubtotals = document.querySelectorAll(".price span");
+            newSubtotals.forEach( element => {
+
+                total = total + Number(element.innerHTML);
+
+            });
+            totalPrice.innerHTML = total.toFixed(2);
 
         }
 

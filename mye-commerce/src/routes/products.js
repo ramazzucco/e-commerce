@@ -63,6 +63,6 @@ router.get('/:category', pagination, productsController.category);
 router.post("/messages",userRoute, productsController.messages);
 
 /* Offers */
-router.post("/offers", productsController.offers);
+router.post("/offers",upload.single("image"), productsController.offers);
 
 module.exports = router;

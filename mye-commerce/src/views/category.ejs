@@ -57,11 +57,11 @@
                         </div>
                         <% if(product.discount > 0) { %>
                         <div class="price">
-                            <p class="item_price">$ <%= product.price %><span><%= product.discount %>% OFF</span></p>
+                            <p class="item_price">$ <%= product.price.toLocaleString("en") %><span><%= product.discount %>% OFF</span></p>
                         </div>
                         <% } else { %>
                         <div class="price">
-                            <p class="item_price">$ <%= product.price %></p>
+                            <p class="item_price">$ <%= product.price.toLocaleString("en") %></p>
                         </div>
                         <% } %>
                     </div>
@@ -81,11 +81,11 @@
                             </div>
                             <% if(product.discount > 0) { %>
                             <div class="price">
-                                <p class="item_price">$ <%= product.price %><span><%= product.discount %>% OFF</span></p>
+                                <p class="item_price">$ <%= product.price.toLocaleString("en") %><span><%= product.discount %>% OFF</span></p>
                             </div>
                             <% } else { %>
                             <div class="price">
-                                <p class="item_price">$ <%= product.price %></p>
+                                <p class="item_price">$ <%= product.price.toLocaleString("en") %></p>
                             </div>
                             <% } %>
                         </div>

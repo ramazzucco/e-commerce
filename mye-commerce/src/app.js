@@ -1,4 +1,5 @@
 const createError = require('http-errors');
+const cors = require('cors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -6,14 +7,17 @@ const logger = require('morgan');
 const methodOverride =  require('method-override');
 const session = require ('express-session');
 const auth = require('./middlewares/auth');
-const cors = require('cors');
 require("dotenv").config();
 
 const indexRouter = require('./routes/index');
 const productsRouter = require("./routes/products");
 const usersRouter = require('./routes/users');
 
-var app = express();
+const usersApiRouter = require('./routes/api/apiUsers');
+const productApiRouter = require('./routes/api/product');
+const dashboardApiRouter = require("./routes/api/dashboard");
+
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -35,6 +39,7 @@ app.use(
 );
 app.use(auth);
 
+// Web Routes.
 app.use('/', indexRouter);
 app.use("/products" , productsRouter);
 app.use('/users', usersRouter);
@@ -44,9 +49,15 @@ app.get('/api/dashboard', function (req, res, next) {
   res.json({msg: 'This is CORS-enabled for all origins!'})
 })
 
-app.listen(90, function () {
+app.listen(80, function () {
   console.log('CORS-enabled web server listening on port 80')
 })
+
+// API routes.
+app.use('/api/apiUsers' ,usersApiRouter);
+app.use('/api/product' ,productApiRouter);
+app.use("/api/dashboard", dashboardApiRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
