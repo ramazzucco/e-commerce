@@ -18,11 +18,11 @@
                 <h3><%= product.name %></h3>
                 <div class="price">
                     <% if(product.discount > 0) { %>
-                        <p class="oldPrice">$ <%= product.price %></p><span><%= product.discount %>% OFF</span>
+                        <p class="oldPrice">$ <%= product.price.toLocaleString("en") %></p><span><%= product.discount %>% OFF</span>
                     <% } %> 
                 </div>
                 <div class="priceWithDiscount">
-                    <p>$ <%= priceWithDiscount %></p>
+                    <p>$ <%= priceWithDiscount.toLocaleString("en") %></p>
                 </div>
                 <form action="/generar_preferencia" method="POST" data-summary-product-label="4 productos">
                     <div class="quantity">

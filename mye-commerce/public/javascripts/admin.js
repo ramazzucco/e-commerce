@@ -4,6 +4,13 @@ window.onload = () => {
     const date = (f.getDate() + " de " + month[f.getMonth()] + " de " + f.getFullYear());
     document.querySelector(".date").innerHTML = `<p>${date}</p>`;
 
+    window.onoffline = () => {
+        document.querySelector("img").setAttribute("style","box-shadow: 0 0 10px 3px red;")
+    }
+    window.ononline = () => {
+        document.querySelector("img").setAttribute("style","box-shadow: 0 0 10px 3px green;")
+    }
+
     // Botones de la barra lateral.
     const buttons = document.querySelectorAll(".sideBar_button")
 
@@ -32,7 +39,7 @@ window.onload = () => {
     const cards = document.querySelectorAll(".card_admin");
 
     buttonCollapse.onclick = () => {
-        console.log(cards)
+
         if(containerCards.className == "cards_admin"){
             containerCards.classList.add("minimized");
             buttonCollapse.innerHTML = `<span class="material-icons keyboard_arrow_up">keyboard_arrow_up</span>`
@@ -42,7 +49,7 @@ window.onload = () => {
         }
 
         cards.forEach(card => {
-            if(card.className == "card_admin"){
+            if(containerCards.className.includes("minimized") == true){
                 card.classList.add("minimized");
             } else {
                 card.classList.remove("minimized");

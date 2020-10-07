@@ -136,8 +136,9 @@ img {
     border-left: 10px solid blue;
     border-radius: 5px;
     padding: 0;
-    margin: 0;
+    margin: 2px 0;
     text-align: center;
+    box-shadow: none;
 }
 .data_page{
     width: 100%;
@@ -157,7 +158,13 @@ img {
     padding: 15px 0;
     margin: 10px 10px;
     text-align: center;
-    box-shadow: 0 0 5px 1px rgb(0 , 0, 0);
+    box-shadow: 1px 1px 5px 1px rgb(0 , 0, 0);
+}
+.card_admin.profits {
+    border-left: 10px solid green;
+}
+.card_admin.pending {
+    border-left: 10px solid red;
 }
 .card_admin p {
     line-height: normal;
