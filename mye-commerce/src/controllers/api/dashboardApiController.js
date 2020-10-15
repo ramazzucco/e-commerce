@@ -40,19 +40,19 @@ const controller = {
                 {
                     type: "primary",
                     text: "Total en Mercaderia",
-                    value: amount.toLocaleString(),
+                    value: amount,
                     icon: "fa-dollar-sign"
                 },
                 {
                     type: "success",
                     text: "Ganancias",
-                    value: profits.toLocaleString(),
+                    value: profits,
                     icon: "fa-dollar-sign"
                 },
                 {
                     type: "danger",
                     text: "Pendiente",
-                    value: pending.toLocaleString(),
+                    value: pending,
                     icon: "fa-dollar-sign"
                 },
             ]
@@ -62,43 +62,41 @@ const controller = {
     lastProduct: async (req, res) => {
         const product = await db.Product.findOne({
             limit: 1,
-            order: [["id", 'DESC']]
+            order: [["id", 'DESC']],
+            include: ["category"]
         })
-        const category = await db.Category.findAll({
-            where: {
-                id: product.category_id
-            }
-        })
+
         res.json({
             meta: {
                 status: 200,
                 link: "/api/dashboard/lastProduct"
             },
             data:
-                {
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    description: product.description,
-                    image: product.image,
-                    stock: product.stock,
-                    discount: product.discount,
-                    category: category[0].title,
-                    link: `http://localhost:3000/products/${category[0].id}/${product.id}`
-                }
+                    {
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        description: product.description,
+                        image: product.image,
+                        stock: product.stock,
+                        discount: product.discount,
+                        category: product.category.title,
+                        link: `http://localhost:3000/products/${product.category.id}/${product.id}`
+                    }
         })
     },
     categories: async (req, res) => {
+        const products = await db.Product.findAll();
         const categorys = await db.Category.findAll({ include: ["products"] })
         res.json({
             meta: {
                 status: 200,
+                totalProducts: products.length,
                 link: "/api/dashboard/categories"
             },
             data:
                 categorys.map(category => {
                     return {
-                        category: category.name,
                         total_products: category.products.length,
                         products: category
                     }
@@ -107,109 +105,67 @@ const controller = {
         })
 
     },
-    allProducts: async (req, res) => {
-        const products = await db.Product.findAll ({include: ['category']});
-        res.json ({
-            meta: {
-                status: 200,
-                totalItems: products.length,
-                link: 'api/dashboard/allProducts'
-            },
-            data: products.map (product => {
-                return {
-                    id: product.id,
-                    name: product.name,
-                    category: product.category.name,
-                    price: product.price,
-                    type: product.type,
-                    weight: product.weight
+    moreVisited: async (req, res) => {
+        const moreVisited = await db.Visita.findAll();
+        const moreVisitedTop10 = await db.Visita.findAll({
+            limit: 10,
+            order: [["numero", "DESC"]]
+        });
+
+        const products = await db.Product.findAll({
+            where: {
+                id: moreVisitedTop10.map( v => { return v.products_id })
+            },attributes: ["id","name","category_id"]
+        })
+
+        const top10 = [];
+        for(let n=0; n < moreVisitedTop10.length; n++) {
+            products.map((product,i)=> {
+                if(product.id === moreVisitedTop10[n].products_id){
+                    top10.push({
+                        visitaN: moreVisitedTop10[n].numero,
+                        productsId: moreVisitedTop10[n].products_id,
+                        category: product.category_id,
+                        product: product.name,
+                    })
                 }
             })
-        })
+        }
 
-    },
-    celulares: async (req, res) => {
-
-        const celulares = await db.Product.findAll({
-            where: { category_id: 1}
-        });
-        let total = 0;
-        celulares.map(product => {
-            total = total + (Number(product.price) * Number(product.stock));
-        })
         res.json({
             meta: {
                 status: 200,
-                title: "Celulares",
-                totalItems: celulares.length,
-                totalPrice: total.toLocaleString(),
-                link: 'api/dashboard/celulares'
+                link: "/api/dashboard/morevisited"
             },
-            data: celulares.map(product => {
-                return {
-                    id: product.id,
-                    name: product.name,
-                    price: Number(product.price).toLocaleString(),
-                    description: product.description,
-                    image: product.image,
-                    stock: product.stock,
-                    discount: product.discount,
-                    category: product.category,
-                    link: `/api/product/${product.id}`
-                }
-            })
+            data: {
+                moreVisited: moreVisited.length,
+                top10: top10
+            }
         })
     },
-    laptops: async (req, res) => {
+    allProducts: async (req, res) => {
+        const products = await db.Product.findAll ({include: ['category']});
 
-        const laptops = await db.Product.findAll({
-            where: { category_id: 2}
-        });
-        let total = 0;
-        laptops.map(product => {
-            total = total + (Number(product.price) * Number(product.stock));
-        })
-        res.json ({
-            meta: {
-                status: 200,
-                title: "Laptops",
-                totalItems: laptops.length,
-                totalPrice: total.toLocaleString(),
-                link: 'api/dashboard/laptops'
-            },
-            data: laptops.map (product => {
-                return {
-                    id: product.id,
-                    name: product.name,
-                    price: Number(product.price).toLocaleString(),
-                    description: product.description,
-                    image: product.image,
-                    stock: product.stock,
-                    discount: product.discount,
-                    category: product.category,
-                    link: `/api/product/${product.id}`
-                }
-            })
-        })
     },
-    parlantes: async (req, res) => {
-
-        const parlantes = await db.Product.findAll({
-            where: { category_id: 3}
+    category: async (req, res) => {
+        const productByCategory = await db.Product.findAll({
+            where: { category_id: req.params.categoryId}
         });
         let total = 0;
-        parlantes.map(product => {
+        productByCategory.map(product => {
             total = total + (Number(product.price) * Number(product.stock));
         })
-        res.json ({
+        const category = await db.Category.findByPk(req.params.categoryId);
+
+        res.json({
             meta: {
                 status: 200,
-                title: "Parlantes",
-                totalItems: parlantes.length,
+                title: category.title,
+                totalItems: productByCategory.length,
                 totalPrice: total.toLocaleString(),
-                link: 'api/dashboard/parlantes'
+                link: `api/dashboard/category/${category.id}`
             },
-            data: parlantes.map (product => {
+            data: productByCategory.map(product => {
                 return {
                     id: product.id,
                     name: product.name,
@@ -219,70 +175,7 @@ const controller = {
                     stock: product.stock,
                     discount: product.discount,
                     category: product.category,
-                    link: `/api/product/${product.id}`
-                }
-            })
-        })
-    },
-    teclados: async (req, res) => {
-
-        const teclados = await db.Product.findAll({
-            where: { category_id: 4}
-        });
-        let total = 0;
-        teclados.map(product => {
-            total = total + (Number(product.price) * Number(product.stock));
-        })
-        res.json ({
-            meta: {
-                status: 200,
-                title: "Teclados",
-                totalItems: teclados.length,
-                totalPrice: total.toLocaleString(),
-                link: 'api/dashboard/teclados'
-            },
-            data: teclados.map (product => {
-                return {
-                    id: product.id,
-                    name: product.name,
-                    price: Number(product.price).toLocaleString(),
-                    description: product.description,
-                    image: product.image,
-                    stock: product.stock,
-                    discount: product.discount,
-                    category: product.category,
-                    link: `/api/product/${product.id}`
-                }
-            })
-        })
-    },
-    mouse: async (req, res) => {
-
-        const mouse = await db.Product.findAll({
-            where: { category_id: 5 }
-        });
-        let total = 0;
-        mouse.map(product => {
-            total = total + (Number(product.price) * Number(product.stock));
-        })
-        res.json ({
-            meta: {
-                status: 200,
-                title: "Mouse",
-                totalItems: mouse.length,
-                totalPrice: total.toLocaleString(),
-                link: 'api/dashboard/mouse'
-            },
-            data: mouse.map (product => {
-                return {
-                    id: product.id,
-                    name: product.name,
-                    price: Number(product.price).toLocaleString(),
-                    description: product.description,
-                    image: product.image,
-                    stock: product.stock,
-                    discount: product.discount,
-                    category: product.category,
+                    page: `http://localhost:3000/products/1/${product.id}`,
                     link: `/api/product/${product.id}`
                 }
             })
@@ -343,20 +236,29 @@ const controller = {
     },
     messages: async (req, res) => {
         const messages = await db.Message.findAll();
+        const users = await db.User.findAll({
+            where: {
+                id: messages.map(m => m.users_id)
+            }
+        })
+        const products = await db.Product.findAll();
 
         res.json({
             meta:{
                 status: 200,
                 totalItems: messages.length,
+                users: users,
                 link: 'api/dashboard/messages'
             },
             data: messages.map( message => {
+                const product = products.filter(p => p.id == message.products_id);
                 return {
                     id: message.id,
                     users_id: message.users_id,
                     to_id: message.to_id,
                     content: message.content,
                     products_id: message.products_id,
+                    product: product[0],
                     from_name: message.from_name,
                     to_name: message.to_name,
                     date: message.date
@@ -365,8 +267,36 @@ const controller = {
         })
     },
     promotions_store: async (req, res) => {
-        const promotion = req.body
-        console.log(promotion)
+
+        const errors = req.file.error;
+        const promotion = req.body;
+
+        promotion.image = req.file.filename;
+
+        const newPromotion = await db.Promotion.create(promotion)
+
+        if(errors){
+            res.json({
+                status: 200,
+                create: "fail",
+                errors: errors
+            })
+        } else {
+            res.json({
+                status: 200,
+                create: "success",
+            })
+        }
+
+    },
+    newmessage: async (req, res) => {
+        console.log(req.body)
+        const newmessage = await db.Message.create(req.body);
+        console.log(newmessage)
+        res.json({
+            status: 200,
+            newmessage: newmessage
+        })
     }
 }
 

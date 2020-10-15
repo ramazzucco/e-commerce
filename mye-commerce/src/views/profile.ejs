@@ -20,7 +20,7 @@
                         <input type="file" name="avatar" id="inputAvatar" value="" accept="image/jpg, image/png, image/jpeg" style="display: none;">
                         <label for="inputAvatar"><img src="/images/avatars/<%= user.avatar %>" alt=""></label>
                     </form>
-                    <p>Hola!</p><h4><%= user.first_name %> </h4>
+                    <p>Hola!</p><h4><%= user.first_name %></h4>
                 </div>
                 <div class="enabled_button myDates" data-id="myDates">
                     <div class="icon_sideBar_profile">
@@ -171,7 +171,7 @@
                                 <input type="number" name="to_id"  value="1" style="display: none;">
                                 <textarea name="content" cols="100" rows="5"></textarea>
                                 <input type="number" name="products_id"  value="" style="display: none;">
-                                <input type="text" name="from_name"  value="<%= u.first_name %><%= u.last_name %>" style="display: none;">
+                                <input type="text" name="from_name"  value="<%= u.first_name %> <%= u.last_name %>" style="display: none;">
                                 <input type="text" name="to_name"  value="ADMIN" style="display: none;">
                                 <button type="submit" onclick="this.form.submit()">Enviar</button>
                             </form>
