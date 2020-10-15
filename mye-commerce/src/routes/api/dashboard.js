@@ -1,6 +1,7 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 const multer = require('multer');
+const path = require("path");
 const DashboardApiController = require('../../controllers/api/dashboardApiController');
 
 
@@ -20,7 +21,7 @@ const upload = multer({
 
       const isPhoto = file.mimetype !== 'image/png' && file.mimetype !== 'image/jpg' && file.mimetype !== 'image/jpeg' ? "" : file;
 
-      console.log(file, "----------->",isPhoto)
+      // console.log(file, "----------->",isPhoto)
 
       if (isPhoto) {
         next(null, true);
@@ -39,15 +40,16 @@ router.get('/widgets', DashboardApiController.widgets);
 router.get('/lastProduct', DashboardApiController.lastProduct);
 router.get('/categories', DashboardApiController.categories);
 router.get('/allProducts', DashboardApiController.allProducts);
-router.get('/celulares', DashboardApiController.celulares);
-router.get('/laptops', DashboardApiController.laptops);
-router.get('/parlantes', DashboardApiController.parlantes);
-router.get('/teclados', DashboardApiController.teclados);
-router.get('/mouse', DashboardApiController.mouse);
-router.get('/promotions', DashboardApiController.promotions);
-router.get('/usersWithMessages', DashboardApiController.usersWithMessages);
-router.get("/messages", DashboardApiController.messages);
+router.get("/morevisited", DashboardApiController.moreVisited);
 
+router.get('/category/:categoryId', DashboardApiController.category);
+
+router.get('/usersWithMessages', DashboardApiController.usersWithMessages);
+
+router.get("/messages", DashboardApiController.messages);
+router.post("/newmessage", DashboardApiController.newmessage)
+
+router.get('/promotions', DashboardApiController.promotions);
 router.post("/promotions",upload.single("image"), DashboardApiController.promotions_store)
 
 
